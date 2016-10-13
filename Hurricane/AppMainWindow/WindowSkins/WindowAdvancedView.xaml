@@ -47,7 +47,7 @@
                        FontSize="16"
                        Foreground="#FFAAAAAA"
                        IsHitTestVisible="False"
-                       Text="Hurricane" />
+                       Text="AnyListen" />
         </Grid>
         <Button Grid.Row="0"
                 Grid.RowSpan="2"
@@ -793,16 +793,16 @@
                                                 <StackPanel.Style>
                                                     <Style TargetType="StackPanel">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Uploader, Converter={StaticResource FalseOnEmptyString}}" Value="false">
+                                                            <DataTrigger Binding="{Binding BitRate, Converter={StaticResource FalseOnEmptyString}}" Value="false">
                                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </StackPanel.Style>
-                                                <TextBlock Text="{DynamicResource Uploader}" />
+                                                <TextBlock Text="{DynamicResource Bitrate}" />
                                                 <TextBlock Margin="5,0,0,0"
                                                            Foreground="{StaticResource NormalColorBrush}"
-                                                           Text="{Binding Uploader}" />
+                                                           Text="{Binding BitRate}" />
                                             </StackPanel>
                                             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                                 <TextBlock Text="{DynamicResource Samplerate}" />
@@ -822,6 +822,9 @@
                                                                 <Path Data="{Binding ProviderVector}" Fill="#FFFF3300" />
                                                             </DataTemplate>
                                                             <DataTemplate DataType="{x:Type track:YouTubeTrack}">
+                                                                <Path Data="{Binding ProviderVector}" Fill="{StaticResource BlackBrush}" />
+                                                            </DataTemplate>
+                                                            <DataTemplate DataType="{x:Type track:AnyListenTrack}">
                                                                 <Path Data="{Binding ProviderVector}" Fill="{StaticResource BlackBrush}" />
                                                             </DataTemplate>
                                                             <DataTemplate DataType="{x:Type track:CustomStream}">
@@ -1034,22 +1037,22 @@
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontWeight="Bold" Text="{DynamicResource Keyword}" />
                                             <TextBlock Text=" - " />
-                                            <TextBlock FontStyle="Italic" Text="Eminem Beautiful" />
+                                            <TextBlock FontStyle="Italic" Text="周杰伦" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontWeight="Bold" Text="{DynamicResource YouTubeVideoLink}" />
                                             <TextBlock Text=" - " />
-                                            <TextBlock FontStyle="Italic" Text="https://www.youtube.com/watch?v=p7LdZ82kL7Q" />
+                                            <TextBlock FontStyle="Italic" Text="http://music.163.com/#/playlist?id=416250433" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontWeight="Bold" Text="{DynamicResource YouTubePlaylistLink}" />
                                             <TextBlock Text=" - " />
-                                            <TextBlock FontStyle="Italic" Text="https://www.youtube.com/playlist?list=PL55713C70BA91BD6E" />
+                                            <TextBlock FontStyle="Italic" Text="http://music.163.com/#/album?id=34780628" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontWeight="Bold" Text="{DynamicResource SoundCloudLink}" />
                                             <TextBlock Text=" - " />
-                                            <TextBlock FontStyle="Italic" Text="https://soundcloud.com/lensko/lensko-cetus" />
+                                            <TextBlock FontStyle="Italic" Text="http://music.163.com/#/artist?id=12025179" />
                                         </StackPanel>
                                     </StackPanel>
                                 </ToolTip>
@@ -1203,9 +1206,9 @@
                             </ListView.ItemContainerStyle>
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="{DynamicResource Track}"
+                                    <GridViewColumn Header="{DynamicResource TrackInfo}"
                                                     behaviors:GridViewSort.PropertyName="Title"
-                                                    listViewLayoutManager:ProportionalColumn.Width="1">
+                                                    listViewLayoutManager:ProportionalColumn.Width="300">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type web:WebTrackResultBase}">
                                                 <Grid>
@@ -1230,20 +1233,41 @@
                                                                   SnapsToDevicePixels="True" />
                                                         </Viewbox>
                                                         <Image Width="50"
-                                                               Height="50"
-                                                               Source="{Binding Image}"
-                                                               Stretch="UniformToFill" />
+                                                               Height="50" Stretch="UniformToFill" Source="{Binding Result.SmallPic}"/>
+                                                        <!---->
                                                     </Grid>
                                                     <StackPanel Grid.Column="1"
                                                                 VerticalAlignment="Center"
                                                                 Orientation="Vertical">
-                                                        <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
-                                                        <TextBlock Text="{Binding Uploader}" TextTrimming="CharacterEllipsis" />
+                                                        <TextBlock FontSize="14" Padding="0,0,0,5" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                                                        <TextBlock FontSize="12" Text="{Binding Uploader}" TextTrimming="CharacterEllipsis" />
                                                     </StackPanel>
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
+                                    <GridViewColumn 
+                                                    Header="{DynamicResource Album}"
+                                                    behaviors:GridViewSort.PropertyName="Album"
+                                                    listViewLayoutManager:ProportionalColumn.Width="200">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type web:WebTrackResultBase}">
+                                                <TextBlock>
+                                                    <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="{Binding Album}" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Album}" Value="">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    
                                     <GridViewColumn Width="100"
                                                     Header="{DynamicResource Duration}"
                                                     behaviors:GridViewSort.PropertyName="Duration"
@@ -1265,41 +1289,8 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Width="200"
-                                                    Header="{DynamicResource Views}"
-                                                    behaviors:GridViewSort.PropertyName="Views"
-                                                    listViewLayoutManager:FixedColumn.Width="200">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type web:WebTrackResultBase}">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Margin="0,0,5,0">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="Text" Value="{Binding Views, Converter={StaticResource FormatLargeNumber}}" />
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Views}" Value="0">
-                                                                        <Setter Property="Text" Value="-" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                    <TextBlock Text="{DynamicResource Views}">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Views}" Value="0">
-                                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Width="60"
+                                    
+                                    <!--<GridViewColumn Width="60"
                                                     Header="{DynamicResource Year}"
                                                     behaviors:GridViewSort.PropertyName="ReleaseYear"
                                                     listViewLayoutManager:FixedColumn.Width="60">
@@ -1319,43 +1310,28 @@
                                                 </TextBlock>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Width="80"
-                                                    Header="Website"
-                                                    behaviors:GridViewSort.PropertyName="ProviderName"
+                                    </GridViewColumn>-->
+                                                        <GridViewColumn Width="80"
+                                                    Header="{DynamicResource Quality}"
+                                                    behaviors:GridViewSort.PropertyName="BitRate"
                                                     listViewLayoutManager:FixedColumn.Width="80">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type web:WebTrackResultBase}">
-                                                <Viewbox Width="20" Height="20">
-                                                    <Grid>
-                                                        <Path Data="{Binding ProviderVector}">
-                                                            <Path.Style>
-                                                                <Style TargetType="Path">
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding ProviderName}" Value="SoundCloud">
-                                                                            <Setter Property="Fill" Value="#FFFF3300" />
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding ProviderName}" Value="YouTube">
-                                                                            <Setter Property="Fill" Value="{StaticResource BlackBrush}" />
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding ProviderName}" Value="Grooveshark">
-                                                                            <Setter Property="Fill" Value="{StaticResource BlackBrush}" />
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding ProviderName}" Value="Vkontakte">
-                                                                            <Setter Property="Fill" Value="{StaticResource BlackBrush}" />
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected}" Value="True">
-                                                                            <Setter Property="Fill" Value="White" />
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Path.Style>
-                                                        </Path>
-                                                    </Grid>
-                                                </Viewbox>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
+                                                            <GridViewColumn.CellTemplate>
+                                                                <DataTemplate DataType="{x:Type web:WebTrackResultBase}">
+                                                                    <TextBlock>
+                                                                        <TextBlock.Style>
+                                                                            <Style TargetType="TextBlock">
+                                                                                <Setter Property="Text" Value="{Binding BitRate}" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding BitRate}" Value="">
+                                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
+                                                                </DataTemplate>
+                                                            </GridViewColumn.CellTemplate>
+                                                        </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>

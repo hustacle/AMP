@@ -34,7 +34,7 @@ namespace Hurricane.Settings
             return
                 Convert.ToBase64String(Encoding.BigEndianUnicode.GetBytes(Rot17.Encrypt(str)))
                     .ToCharArray()
-                    .Select(x => String.Format("{0:X}", (int) x))
+                    .Select(x => $"{(int) x:X}")
                     .Aggregate(new StringBuilder(), (x, y) => x.Append(y))
                     .ToString();
         }

@@ -14,8 +14,7 @@ namespace Hurricane.Music.Download
                 client.DownloadProgressChanged += (s, e) => progressChangedAction.Invoke(e.ProgressPercentage);
                 await
                     client.DownloadFileTaskAsync(
-                        string.Format("https://api.soundcloud.com/tracks/{0}/download?client_id={1}", soundCloudId,
-                            SensitiveInformation.SoundCloudKey), fileName);
+                        $"https://api.soundcloud.com/tracks/{soundCloudId}/download?client_id={SensitiveInformation.SoundCloudKey}", fileName);
             }
         }
     }

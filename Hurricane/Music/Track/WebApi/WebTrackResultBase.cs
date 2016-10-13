@@ -46,7 +46,7 @@ namespace Hurricane.Music.Track.WebApi
         public abstract PlayableBase ToPlayable();
         public abstract GeometryGroup ProviderVector { get; }
 
-        public IRepresentable Representer { get { return this; } }
+        public IRepresentable Representer => this;
 
         public virtual async Task DownloadImage()
         {
@@ -58,7 +58,7 @@ namespace Hurricane.Music.Track.WebApi
                     IsLoadingImage = true;
                     Image = await Utilities.ImageHelper.DownloadImage(client, ImageUrl);
                     IsLoadingImage = false;
-                    if (ImageLoadedComplete != null) ImageLoadedComplete(this, EventArgs.Empty);
+                    ImageLoadedComplete?.Invoke(this, EventArgs.Empty);
                 }
             }
             catch
@@ -98,10 +98,13 @@ namespace Hurricane.Music.Track.WebApi
         public List<Genre> Genres { get; set; }
 
         public string Album { get; set; }
+        public SongResult WebTrack { get; set; }
+
+        public string BitRate { get; set; }
 
 
         public event EventHandler ImageLoadedComplete;
     }
 
-    public enum ProviderName { SoundCloud, YouTube, Grooveshark, Vkontakte }
+    public enum ProviderName { SoundCloud, YouTube, Grooveshark, Vkontakte, AnyListen }
 }

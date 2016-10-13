@@ -28,10 +28,7 @@ namespace Hurricane.Music.Playlist
 
         // ReSharper disable once InconsistentNaming
         protected ObservableCollection<PlayableBase> _tracks;
-        public ObservableCollection<PlayableBase> Tracks
-        {
-            get { return _tracks; }
-        }
+        public ObservableCollection<PlayableBase> Tracks => _tracks;
 
         private ICollectionView _viewsource;
         [XmlIgnore]

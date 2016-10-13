@@ -8,10 +8,7 @@ namespace Hurricane.Designer
         #region "Singleton & Constructor"
 
         private static ThemePackViewModel _instance;
-        public static ThemePackViewModel Instance
-        {
-            get { return _instance ?? (_instance = new ThemePackViewModel()); }
-        }
+        public static ThemePackViewModel Instance => _instance ?? (_instance = new ThemePackViewModel());
 
 
         private ThemePackViewModel()

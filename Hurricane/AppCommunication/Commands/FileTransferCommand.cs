@@ -10,10 +10,7 @@ namespace Hurricane.AppCommunication.Commands
     {
         private const int BufferSize = 4096;
 
-        public override string RegexPattern
-        {
-            get { return "^getFile:(?<trackId>(.*?))$"; }
-        }
+        public override string RegexPattern => "^getFile:(?<trackId>(.*?))$";
 
         public override void Execute(string line, StreamProvider streams, MusicManager musicManager)
         {

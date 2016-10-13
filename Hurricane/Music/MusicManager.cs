@@ -68,7 +68,7 @@ namespace Hurricane.Music
             set
             {
                 SetProperty(value, ref _searchtext);
-                if (SelectedPlaylist != null && SelectedPlaylist.ViewSource != null) SelectedPlaylist.ViewSource.Refresh();
+                SelectedPlaylist?.ViewSource?.Refresh();
             }
         }
 
@@ -387,7 +387,8 @@ namespace Hurricane.Music
 
         public int PlaylistToIndex(IPlaylist playlist)
         {
-            if (playlist is NormalPlaylist) return Playlists.IndexOf((NormalPlaylist)playlist);
+            var item = playlist as NormalPlaylist;
+            if (item != null) return Playlists.IndexOf(item);
             if (playlist is FavoriteList) return -1;
             return -10;
         }

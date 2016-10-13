@@ -116,10 +116,7 @@ namespace Hurricane.Music.Track.WebApi.YouTubeApi
             return new Tuple<bool, List<WebTrackResultBase>, IPlaylistResult>(false, null, null);
         }
 
-        public string ServiceName
-        {
-            get { return "YouTube"; }
-        }
+        public string ServiceName => "YouTube";
 
         public async Task<List<WebTrackResultBase>> Search(string searchText)
         {
@@ -159,14 +156,8 @@ namespace Hurricane.Music.Track.WebApi.YouTubeApi
             return ServiceName;
         }
 
-        public bool IsEnabled
-        {
-            get { return true; }
-        }
+        public bool IsEnabled => true;
 
-        public System.Windows.FrameworkElement ApiSettings
-        {
-            get { return null; }
-        }
+        public System.Windows.FrameworkElement ApiSettings => null;
     }
 }

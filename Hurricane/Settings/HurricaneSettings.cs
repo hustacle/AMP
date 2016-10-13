@@ -46,15 +46,9 @@ namespace Hurricane.Settings
             }
         }
 
-        public static PathProvider Paths
-        {
-            get { return _paths ?? (_paths = new PathProvider()); }
-        }
+        public static PathProvider Paths => _paths ?? (_paths = new PathProvider());
 
-        public static HurricaneSettings Instance
-        {
-            get { return _instance ?? (_instance = new HurricaneSettings()); }
-        }
+        public static HurricaneSettings Instance => _instance ?? (_instance = new HurricaneSettings());
 
         public PlaylistSettings Playlists { get; set; }
         public ConfigSettings Config { get; set; }
@@ -86,9 +80,9 @@ namespace Hurricane.Settings
             //Important if the app gets closed
             var saveThread = new Thread(() =>
             {
-                if (Playlists != null) Playlists.Save(Paths.BaseDirectory);
-                if (Config != null) Config.Save(Paths.BaseDirectory);
-                if (CurrentState != null) CurrentState.Save(Paths.BaseDirectory);
+                Playlists?.Save(Paths.BaseDirectory);
+                Config?.Save(Paths.BaseDirectory);
+                CurrentState?.Save(Paths.BaseDirectory);
                 _isSaving = false;
             }) {IsBackground = false, Priority = ThreadPriority.Highest};
             saveThread.Start();

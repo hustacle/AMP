@@ -53,6 +53,16 @@ namespace Hurricane.Music.Track.WebApi
             }
         }
 
+        private List<WebTrackResultBase> _selectedTracks;
+        public List<WebTrackResultBase> SelectedTracks
+        {
+            get { return _selectedTracks; }
+            set
+            {
+                SetProperty(value, ref _selectedTracks);
+            }
+        }
+
         private IPlaylistResult _playlistResult;
         public IPlaylistResult PlaylistResult
         {
@@ -76,8 +86,9 @@ namespace Hurricane.Music.Track.WebApi
                     IsLoading = true;
                     if (_isSearching)
                     {
-                        _canceled = true;
-                        await Task.Run(() => _cancelWaiter.WaitOne());
+                        //_canceled = true;
+                        //await Task.Run(() => _cancelWaiter.WaitOne());
+                        return;
                     }
 
                     _isSearching = true;
@@ -92,11 +103,11 @@ namespace Hurricane.Music.Track.WebApi
                     }
                     IsLoading = false;
 
-                    foreach (var track in Results)
-                    {
-                        await track.DownloadImage();
-                        if (CheckForCanceled()) return;
-                    }
+                    //foreach (var track in Results)
+                    //{
+                    //    await track.DownloadImage();
+                    //    if (CheckForCanceled()) return;
+                    //}
                     _isSearching = false;
                 }));
             }
@@ -119,7 +130,11 @@ namespace Hurricane.Music.Track.WebApi
             var tasks = MusicApis.Where((t, i) => t.IsEnabled && (_manager.DownloadManager.SelectedService == 0 || _manager.DownloadManager.SelectedService == i + 1)).Select(t => t.Search(SearchText)).ToList();
             foreach (var task in tasks)
             {
-                list.AddRange(await task);
+                var results = await task;
+                if (results != null)
+                {
+                    list.AddRange(results);
+                }
             }
 
             NothingFound = list.Count == 0;
@@ -278,17 +293,17 @@ namespace Hurricane.Music.Track.WebApi
             return true;
         }
 
-        private bool CheckForCanceled()
-        {
-            if (_canceled)
-            {
-                _cancelWaiter.Set();
-                _canceled = false;
-                _isSearching = false;
-                return true;
-            }
-            return false;
-        }
+        //private bool CheckForCanceled()
+        //{
+        //    if (_canceled)
+        //    {
+        //        _cancelWaiter.Set();
+        //        _canceled = false;
+        //        _isSearching = false;
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         private void SortResults(IEnumerable<WebTrackResultBase> list)
         {
@@ -309,9 +324,16 @@ namespace Hurricane.Music.Track.WebApi
             _baseWindow = baseWindow;
             MusicApis = new List<IMusicApi>
             {
-                new SoundCloudApi.SoundCloudApi(),
+                new AnyListen.WyMusicApi(),
+                new AnyListen.TxMusic(),
+                new AnyListen.BdMusic(),
+                new AnyListen.XmMusic(),
+                new AnyListen.TtMusic(),
+                new AnyListen.KgMusic(),
+                new AnyListen.KwMusic()
+                //new SoundCloudApi.SoundCloudApi(),
                 //new VkontakteApi.VkontakteApi(),
-                new YouTubeApi.YouTubeApi()
+                //new YouTubeApi.YouTubeApi()
             }; //new GroovesharkApi.GroovesharkApi()
         }
     }

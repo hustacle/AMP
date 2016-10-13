@@ -10,10 +10,7 @@ namespace Hurricane.Music
     class AsyncTrackLoader
     {
         private static AsyncTrackLoader _instance;
-        public static AsyncTrackLoader Instance
-        {
-            get { return _instance ?? (_instance = new AsyncTrackLoader()); }
-        }
+        public static AsyncTrackLoader Instance => _instance ?? (_instance = new AsyncTrackLoader());
 
         private AsyncTrackLoader()
         {

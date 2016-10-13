@@ -24,7 +24,8 @@ namespace Hurricane.Music.MusicCover.APIs.Lastfm
             string artist = useArtist ? track.Artist : string.Empty;
             if (trimtrackname) title = TrimTrackTitle(track.Title);
 
-            string url = Uri.EscapeUriString(string.Format("http://ws.audioscrobbler.com/2.0/?method=track.search&track={0}{1}&api_key={2}&format=json", title.ToEscapedUrl(), !string.IsNullOrEmpty(artist) ? "&artist=" + artist.ToEscapedUrl() : string.Empty, apikey));
+            string url = Uri.EscapeUriString(
+                $"http://ws.audioscrobbler.com/2.0/?method=track.search&track={title.ToEscapedUrl()}{(!string.IsNullOrEmpty(artist) ? "&artist=" + artist.ToEscapedUrl() : string.Empty)}&api_key={apikey}&format=json");
             using (WebClient web = new WebClient { Proxy = null })
             {
                 string result = await web.DownloadStringTaskAsync(new Uri(url));

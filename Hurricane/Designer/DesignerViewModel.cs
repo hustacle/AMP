@@ -15,10 +15,7 @@ namespace Hurricane.Designer
         #region "Singleton & Constructor"
 
         private static DesignerViewModel _instance;
-        public static DesignerViewModel Instance
-        {
-            get { return _instance ?? (_instance = new DesignerViewModel()); }
-        }
+        public static DesignerViewModel Instance => _instance ?? (_instance = new DesignerViewModel());
 
 
         private DesignerViewModel()

@@ -14,6 +14,7 @@ namespace Hurricane.Music.Track
         List<Genre> Genres { get; set; }
         uint Year { get; set; }
         string Album { get; set; }
+        SongResult WebTrack { get; set; }
     }
 
     public enum Genre

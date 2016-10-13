@@ -7,7 +7,7 @@
                       xmlns:tb="http://www.hardcodet.net/taskbar"
                       xmlns:viewmodels="clr-namespace:Hurricane.ViewModels"
                       x:Name="WindowInstance"
-                      Title="Hurricane"
+                      Title="AnyListen"
                       Width="500"
                       Height="400"
                       DataContext="{x:Static viewmodels:MainViewModel.Instance}"
@@ -152,7 +152,7 @@
         </Grid>
         <tb:TaskbarIcon x:Name="NotifyIcon"
                         IconSource="/Resources/App/icon.ico"
-                        ToolTipText="Hurricane"
+                        ToolTipText="AnyListen"
                         TrayMouseDoubleClick="NotifyIcon_OnTrayMouseDoubleClick"
                         Visibility="Hidden">
             <tb:TaskbarIcon.ContextMenu>

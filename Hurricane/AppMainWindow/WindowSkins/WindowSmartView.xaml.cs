@@ -92,17 +92,17 @@ namespace Hurricane.AppMainWindow.WindowSkins
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CloseRequest != null) CloseRequest(this, EventArgs.Empty);
+            CloseRequest?.Invoke(this, EventArgs.Empty);
         }
 
         private void Titlebar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (DragMoveStart != null) DragMoveStart(this, EventArgs.Empty);
+            DragMoveStart?.Invoke(this, EventArgs.Empty);
         }
 
         private void Titlebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (DragMoveStop != null) DragMoveStop(this, EventArgs.Empty);
+            DragMoveStop?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler DragMoveStart;
@@ -126,13 +126,13 @@ namespace Hurricane.AppMainWindow.WindowSkins
         public void EnableWindow()
         {
             var visulisation = AudioVisualisationContentControl.Tag as IAudioVisualisation;
-            if (visulisation != null) visulisation.Enable();
+            visulisation?.Enable();
         }
 
         public void DisableWindow()
         {
             var visulisation = AudioVisualisationContentControl.Tag as IAudioVisualisation;
-            if (visulisation != null) visulisation.Disable();
+            visulisation?.Disable();
         }
 
         public WindowSkinConfiguration Configuration { get; set; }

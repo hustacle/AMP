@@ -43,11 +43,8 @@ namespace Hurricane.Music.Download
         public IMusicInformation MusicInformation { get; set; }
         public string DownloadFilename { get; set; }
 
-        public bool CanDownload
-        {
-            get { return true; }
-        }
+        public bool CanDownload => true;
     }
 
-    public enum DownloadMethod { SoundCloud, youtube_dl }
+    public enum DownloadMethod { SoundCloud, youtube_dl, AnyListen }
 }

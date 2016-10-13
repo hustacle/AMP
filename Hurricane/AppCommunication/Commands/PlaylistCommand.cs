@@ -13,10 +13,7 @@ namespace Hurricane.AppCommunication.Commands
 {
     class PlaylistCommand : CommandBase
     {
-        public override string RegexPattern
-        {
-            get { return "^getPlaylists$"; }
-        }
+        public override string RegexPattern => "^getPlaylists$";
 
         public override void Execute(string line, StreamProvider streams, MusicManager musicManager)
         {

@@ -63,7 +63,8 @@ namespace Hurricane.Music.API
                 new Command("position",
                     new List<CommandBase>
                     {
-                        new CommandFunction("get",  s => string.Format("{0} {1}",(int) MusicManager.CSCoreEngine.CurrentTrackPosition.TotalSeconds,(int) MusicManager.CSCoreEngine.CurrentTrackLength.TotalSeconds))
+                        new CommandFunction("get",  s =>
+                            $"{(int) MusicManager.CSCoreEngine.CurrentTrackPosition.TotalSeconds} {(int) MusicManager.CSCoreEngine.CurrentTrackLength.TotalSeconds}")
                     })
             };
         }
@@ -116,7 +117,7 @@ namespace Hurricane.Music.API
                 }
             }
 
-            return string.Format("Error: can't identify '{0}.'", commandstr);
+            return $"Error: can't identify '{commandstr}.'";
         }
     }
 }

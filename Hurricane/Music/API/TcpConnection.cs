@@ -57,7 +57,7 @@ namespace Hurricane.Music.API
 
         void CSCoreEngine_PositionChanged(object sender, PositionChangedEventArgs e)
         {
-            WriteLine(string.Format("event position {0} {1}", e.NewPosition, e.TrackLength));
+            WriteLine($"event position {e.NewPosition} {e.TrackLength}");
         }
 
         protected MusicManager manager;

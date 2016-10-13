@@ -21,10 +21,7 @@ namespace Hurricane.ViewModels
     partial class MainViewModel : PropertyChangedBase
     {
         private static MainViewModel _instance;
-        public static MainViewModel Instance
-        {
-            get { return _instance ?? (_instance = new MainViewModel()); }
-        }
+        public static MainViewModel Instance => _instance ?? (_instance = new MainViewModel());
 
         private MainViewModel()
         {
@@ -254,15 +251,9 @@ namespace Hurricane.ViewModels
         }
 
         private TrackListDropHandler _trackListDropHandler;
-        public TrackListDropHandler TrackListDropHandler
-        {
-            get { return _trackListDropHandler ?? (_trackListDropHandler = new TrackListDropHandler()); }
-        }
+        public TrackListDropHandler TrackListDropHandler => _trackListDropHandler ?? (_trackListDropHandler = new TrackListDropHandler());
 
         private PlaylistListDropHandler _playlistListDropHandler;
-        public PlaylistListDropHandler PlaylistListDropHandler
-        {
-            get { return _playlistListDropHandler ?? (_playlistListDropHandler = new PlaylistListDropHandler()); }
-        }
+        public PlaylistListDropHandler PlaylistListDropHandler => _playlistListDropHandler ?? (_playlistListDropHandler = new PlaylistListDropHandler());
     }
 }

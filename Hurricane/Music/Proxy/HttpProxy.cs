@@ -20,7 +20,7 @@ namespace Hurricane.Music.Proxy
 
         public override string ToString()
         {
-            return string.Format("{0}:{1}", Ip, Port);
+            return $"{Ip}:{Port}";
         }
     }
 }

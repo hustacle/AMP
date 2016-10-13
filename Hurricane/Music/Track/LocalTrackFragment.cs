@@ -71,10 +71,7 @@ namespace Hurricane.Music.Track
             });
         }
 
-        public override string UniqueId
-        {
-            get { return string.Format("{0}-{1}", Path, TrackNumber); }
-        }
+        public override string UniqueId => $"{Path}-{TrackNumber}";
 
         [XmlIgnore]
         TimeSpan Offset { get; set; }

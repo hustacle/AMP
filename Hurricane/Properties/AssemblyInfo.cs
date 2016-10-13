@@ -7,12 +7,12 @@ using System.Resources;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("Hurricane")]
-[assembly: AssemblyDescription("The music player with style")]
+[assembly: AssemblyTitle("AnyListen")]
+[assembly: AssemblyDescription("The music player with universal searching")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Alkaline")]
-[assembly: AssemblyProduct("Hurricane")]
-[assembly: AssemblyCopyright("Copyright © 2014-2015 Alkaline")]
+[assembly: AssemblyCompany("Shelher")]
+[assembly: AssemblyProduct("AnyListen")]
+[assembly: AssemblyCopyright("Copyright © 2013-2016 Shelher")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: Exceptionless("3e5cdb4c97c2440884e4514a02821ddb")]
@@ -52,6 +52,6 @@ using System.Resources;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.3.10.*")]
-[assembly: AssemblyFileVersion("0.3.10")]
+[assembly: AssemblyVersion("1.0.0.*")]
+[assembly: AssemblyFileVersion("1.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("")]

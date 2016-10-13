@@ -20,10 +20,7 @@ namespace Hurricane.Music.Download
         #region "Singleton & Constructor"
 
         private static youtube_dl _instance;
-        public static youtube_dl Instance
-        {
-            get { return _instance ?? (_instance = new youtube_dl()); }
-        }
+        public static youtube_dl Instance => _instance ?? (_instance = new youtube_dl());
 
 
         private youtube_dl()
@@ -32,10 +29,7 @@ namespace Hurricane.Music.Download
 
         #endregion
 
-        public string ExecutablePath
-        {
-            get { return Path.Combine(HurricaneSettings.Paths.BaseDirectory, "youtube-dl.exe"); }
-        }
+        public string ExecutablePath => Path.Combine(HurricaneSettings.Paths.BaseDirectory, "youtube-dl.exe");
 
         private bool _isLoaded;
 
@@ -82,7 +76,7 @@ namespace Hurricane.Music.Download
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     FileName = ExecutablePath,
-                    Arguments = string.Format("-g {0} -f bestaudio", youTubeLink)
+                    Arguments = $"-g {youTubeLink} -f bestaudio"
                 }
             })
             {
@@ -127,7 +121,7 @@ namespace Hurricane.Music.Download
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     FileName = "youtube-dl.exe",
-                    Arguments = string.Format("-g {0}{1} -j", groovesharkUrl, proxy != null ? string.Format(" --proxy \"{0}\"", proxy) : null)
+                    Arguments = $"-g {groovesharkUrl}{(proxy != null ? $" --proxy \"{proxy}\"" : null)} -j"
                 }
             })
             {
@@ -181,7 +175,8 @@ namespace Hurricane.Music.Download
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     FileName = ExecutablePath,
-                    Arguments = string.Format("{0} --extract-audio --ffmpeg-location \"{1}\" --output \"{2}\"", link, HurricaneSettings.Paths.FFmpegPath, fileName)
+                    Arguments =
+                        $"{link} --extract-audio --ffmpeg-location \"{HurricaneSettings.Paths.FFmpegPath}\" --output \"{fileName}\""
                 }
             })
             {

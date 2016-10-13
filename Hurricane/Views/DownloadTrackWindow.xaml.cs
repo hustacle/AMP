@@ -63,8 +63,7 @@ namespace Hurricane.Views
                 var sfd = new SaveFileDialog
                 {
                     Filter =
-                        string.Format("{0}|{1}|MP3|*.mp3|AAC|*.aac|WMA|*.wma",
-                            Application.Current.Resources["CopyFromOriginal"], "*" + _defaultExtension),
+                        $"{Application.Current.Resources["CopyFromOriginal"]}|{"*" + _defaultExtension}|MP3|*.mp3|AAC|*.aac|WMA|*.wma|OGG|*.ogg|FLAC|*.flac|APE|*.ape|WAV|*.wav",
                     FilterIndex = (int)(DownloadSettings.Format +1),
                     FileName = Path.GetFileName(SelectedPath)
                 };
@@ -114,7 +113,7 @@ namespace Hurricane.Views
         #region INotifyPropertyChanged
         protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -130,9 +129,9 @@ namespace Hurricane.Views
         {
             if (_isInFileMode)
             {
-                var directory = new FileInfo(SelectedPath).DirectoryName;
-                if (!string.IsNullOrEmpty(directory))
-                    DownloadSettings.DownloadFolder = directory;
+                //var directory = new FileInfo(SelectedPath).DirectoryName;
+                //if (!string.IsNullOrEmpty(directory))
+                //    //DownloadSettings.DownloadFolder = directory;
             }
             else
             {

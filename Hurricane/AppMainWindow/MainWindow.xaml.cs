@@ -34,10 +34,10 @@ namespace Hurricane
         public IWindowSkin HostedWindow { get; set; }
 
         private IWindowSkin _smartWindowSkin;
-        public IWindowSkin SmartWindowSkin { get { return _smartWindowSkin ?? (_smartWindowSkin = new WindowSmartView()); } }
+        public IWindowSkin SmartWindowSkin => _smartWindowSkin ?? (_smartWindowSkin = new WindowSmartView());
 
         private IWindowSkin _advancedWindowSkin;
-        public IWindowSkin AdvancedWindowSkin { get { return _advancedWindowSkin ?? (_advancedWindowSkin = new WindowAdvancedView()); } }
+        public IWindowSkin AdvancedWindowSkin => _advancedWindowSkin ?? (_advancedWindowSkin = new WindowAdvancedView());
 
         #region Constructor & Load
 

@@ -28,10 +28,7 @@ namespace Hurricane.Music.AudioEngine
             return base.Read(buffer, offset, count);
         }
 
-        public override long Length
-        {
-            get { return this.GetRawElements(TrackLength); }
-        }
+        public override long Length => this.GetRawElements(TrackLength);
 
         public override long Position
         {

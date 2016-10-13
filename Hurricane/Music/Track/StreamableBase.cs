@@ -6,21 +6,16 @@ namespace Hurricane.Music.Track
 {
     public abstract class StreamableBase : PlayableBase, IDownloadable
     {
-        public override TrackType TrackType
-        {
-            get { return TrackType.Stream; }
-        }
+        public override TrackType TrackType => TrackType.Stream;
 
-        public override bool TrackExists
-        {
-            get { return true; }
-        }
+        public override bool TrackExists => true;
 
         public abstract GeometryGroup ProviderVector { get; }
         public string Uploader { get; set; }
         public abstract string Link { get; }
         public abstract string Website { get; }
         public abstract bool IsInfinityStream { get; }
+        public string BitRate { get; set; }
 
         //IDownloadable
         public abstract string DownloadParameter { get; }

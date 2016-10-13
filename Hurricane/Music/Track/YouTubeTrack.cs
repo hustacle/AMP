@@ -24,10 +24,7 @@ namespace Hurricane.Music.Track
     {
         public string YouTubeId { get; set; }
 
-        public string ThumbnailUrl
-        {
-            get { return string.Format("https://img.youtube.com/vi/{0}/mqdefault.jpg", YouTubeId); }
-        }
+        public string ThumbnailUrl => $"https://img.youtube.com/vi/{YouTubeId}/mqdefault.jpg";
 
         public static string GetYouTubeIdFromLink(string youTubeLink)
         {
@@ -40,7 +37,8 @@ namespace Hurricane.Music.Track
         {
             using (var client = new WebClient { Proxy = null })
             {
-                return await LoadInformation(JsonConvert.DeserializeObject<SingleVideoSearchResult>(await client.DownloadStringTaskAsync(string.Format("http://gdata.youtube.com/feeds/api/videos/{0}?v=2&alt=jsonc", YouTubeId))));
+                return await LoadInformation(JsonConvert.DeserializeObject<SingleVideoSearchResult>(await client.DownloadStringTaskAsync(
+                    $"http://gdata.youtube.com/feeds/api/videos/{YouTubeId}?v=2&alt=jsonc")));
             }
         }
 
@@ -50,7 +48,7 @@ namespace Hurricane.Music.Track
             Title = result.data.title;
             Artist = result.data.uploader;
             Uploader = result.data.uploader; //Because the user can change the artist
-
+            BitRate = "128K";
             using (var soundSource = await GetSoundSource())
             {
                 kHz = soundSource.WaveFormat.SampleRate / 1000;
@@ -65,6 +63,7 @@ namespace Hurricane.Music.Track
             Title = ytResult.title;
             Artist = ytResult.uploader;
             Uploader = ytResult.uploader;
+            BitRate = "128K";
             //SetDuration(TimeSpan.FromSeconds(int.Parse(ytResult.MediaGroup.Duration.seconds)));
             return true;
         }
@@ -98,40 +97,19 @@ namespace Hurricane.Music.Track
             return _geometryGroup;
         }
 
-        public override GeometryGroup ProviderVector
-        {
-            get { return GetProviderVector(); }
-        }
+        public override GeometryGroup ProviderVector => GetProviderVector();
 
-        public override string DownloadParameter
-        {
-            get { return Link; }
-        }
+        public override string DownloadParameter => Link;
 
-        public override string DownloadFilename
-        {
-            get { return Title.ToEscapedFilename(); }
-        }
+        public override string DownloadFilename => Title.ToEscapedFilename();
 
-        public override DownloadMethod DownloadMethod
-        {
-            get { return DownloadMethod.youtube_dl; }
-        }
+        public override DownloadMethod DownloadMethod => DownloadMethod.youtube_dl;
 
-        public override bool CanDownload
-        {
-            get { return true; }
-        }
+        public override bool CanDownload => true;
 
-        public override string Link
-        {
-            get { return string.Format("https://www.youtube.com/watch?v={0}", YouTubeId); }
-        }
+        public override string Link => $"https://www.youtube.com/watch?v={YouTubeId}";
 
-        public override string Website
-        {
-            get { return "https://www.youtube.com/"; }
-        }
+        public override string Website => "https://www.youtube.com/";
 
         protected async override Task LoadImage(DirectoryInfo albumCoverDirectory)
         {
@@ -171,9 +149,6 @@ namespace Hurricane.Music.Track
             }
         }
 
-        public override bool IsInfinityStream
-        {
-            get { return false; }
-        }
+        public override bool IsInfinityStream => false;
     }
 }

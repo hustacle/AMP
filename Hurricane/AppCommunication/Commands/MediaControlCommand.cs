@@ -9,10 +9,7 @@ namespace Hurricane.AppCommunication.Commands
 {
     class MediaControlCommand : CommandBase
     {
-        public override string RegexPattern
-        {
-            get { return "^mediaControl;(?<command>(.*?))$"; }
-        }
+        public override string RegexPattern => "^mediaControl;(?<command>(.*?))$";
 
         private static List<MediaCommand> _mediaCommands; 
         static List<MediaCommand> MediaCommands
@@ -52,10 +49,7 @@ namespace Hurricane.AppCommunication.Commands
         class MediaCommand : CommandBase
         {
             private readonly string _regexPattern;
-            public override string RegexPattern
-            {
-                get { return _regexPattern; }
-            }
+            public override string RegexPattern => _regexPattern;
 
             private readonly Action<string, StreamProvider, MusicManager> _action;
             public override void Execute(string line, StreamProvider streams, MusicManager musicManager)

@@ -149,13 +149,7 @@ namespace Hurricane.Music
 
         #region Properties
         [XmlIgnore]
-        public bool HasTracks
-        {
-            get
-            {
-                return Count > 0;
-            }
-        }
+        public bool HasTracks => Count > 0;
 
         private TimeSpan _duration;
         public TimeSpan Duration

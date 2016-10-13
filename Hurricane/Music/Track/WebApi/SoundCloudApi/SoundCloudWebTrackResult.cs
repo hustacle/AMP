@@ -7,10 +7,7 @@ namespace Hurricane.Music.Track.WebApi.SoundCloudApi
 {
     class SoundCloudWebTrackResult : WebTrackResultBase
     {
-        public override ProviderName ProviderName
-        {
-            get { return ProviderName.SoundCloud; }
-        }
+        public override ProviderName ProviderName => ProviderName.SoundCloud;
 
         public override PlayableBase ToPlayable()
         {
@@ -26,29 +23,14 @@ namespace Hurricane.Music.Track.WebApi.SoundCloudApi
             return newtrack;
         }
 
-        public override GeometryGroup ProviderVector
-        {
-            get { return SoundCloudTrack.GetProviderVector(); }
-        }
+        public override GeometryGroup ProviderVector => SoundCloudTrack.GetProviderVector();
 
-        public override bool CanDownload
-        {
-            get { return ((ApiResult)Result).downloadable && !string.IsNullOrEmpty(((ApiResult)Result).download_url); }
-        }
+        public override bool CanDownload => ((ApiResult)Result).downloadable && !string.IsNullOrEmpty(((ApiResult)Result).download_url);
 
-        public override string DownloadParameter
-        {
-            get { return ((ApiResult)Result).id.ToString(); }
-        }
+        public override string DownloadParameter => ((ApiResult)Result).id.ToString();
 
-        public override string DownloadFilename
-        {
-            get { return Title.ToEscapedFilename(); }
-        }
+        public override string DownloadFilename => Title.ToEscapedFilename();
 
-        public override DownloadMethod DownloadMethod
-        {
-            get { return DownloadMethod.SoundCloud; }
-        }
+        public override DownloadMethod DownloadMethod => DownloadMethod.SoundCloud;
     }
 }

@@ -22,10 +22,7 @@ namespace Hurricane.Music.Track
         public string Extension { get; set; }
 
         private FileInfo _trackinformation;
-        public FileInfo TrackInformation
-        {
-            get { return _trackinformation ?? (_trackinformation = new FileInfo(Path)); }
-        }
+        public FileInfo TrackInformation => _trackinformation ?? (_trackinformation = new FileInfo(Path));
 
         #region Information loading
 
@@ -133,10 +130,7 @@ namespace Hurricane.Music.Track
             SetDuration(timeSpan);
         }
 
-        public override bool TrackExists
-        {
-            get { return System.IO.File.Exists(Path); }
-        }
+        public override bool TrackExists => System.IO.File.Exists(Path);
 
         #region Image
 
@@ -196,10 +190,7 @@ namespace Hurricane.Music.Track
             return Task.Run(() => CutWaveSource(CodecFactory.Instance.GetCodec(Path)));
         }
 
-        public virtual string UniqueId
-        {
-            get { return TrackInformation.FullName; }
-        }
+        public virtual string UniqueId => TrackInformation.FullName;
 
         public override bool Equals(PlayableBase other)
         {
@@ -218,9 +209,6 @@ namespace Hurricane.Music.Track
             Process.Start("explorer.exe", "/select, \"" + Path + "\"");
         }
 
-        public override TrackType TrackType
-        {
-            get { return TrackType.File; }
-        }
+        public override TrackType TrackType => TrackType.File;
     }
 }

@@ -15,7 +15,7 @@ namespace Hurricane.GUI.Converter
             int mag = (int)Math.Log(value, 1024);
             decimal adjustedSize = (decimal)value / (1L << (mag * 10));
 
-            return string.Format("{0:n1} {1}", adjustedSize, SizeSuffixes[mag]);
+            return $"{adjustedSize:n1} {SizeSuffixes[mag]}";
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

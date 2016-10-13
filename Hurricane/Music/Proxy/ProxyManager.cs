@@ -11,10 +11,7 @@ namespace Hurricane.Music.Proxy
     public class ProxyManager
     {
         private static ProxyManager _instance;
-        public static ProxyManager Instance
-        {
-            get { return _instance ?? (_instance = new ProxyManager()); }
-        }
+        public static ProxyManager Instance => _instance ?? (_instance = new ProxyManager());
 
 
         private ProxyManager()

@@ -134,15 +134,9 @@ namespace Hurricane.Designer.Data
         #region IAudioVisualisationContainer
 
         private IAudioVisualisationPlugin _audioVisualisationPlugin;
-        IAudioVisualisationPlugin IAudioVisualisationContainer.Visualisation
-        {
-            get { return _audioVisualisationPlugin; }
-        }
+        IAudioVisualisationPlugin IAudioVisualisationContainer.Visualisation => _audioVisualisationPlugin;
 
-        string IAudioVisualisationContainer.Name
-        {
-            get { return DefaultText; }
-        }
+        string IAudioVisualisationContainer.Name => DefaultText;
 
         #endregion
 
@@ -150,25 +144,16 @@ namespace Hurricane.Designer.Data
 
         private ResourceDictionary _accentColorResourceDictionary;
 
-        string IAccentColor.Name
-        {
-            get { return DefaultText; }
-        }
+        string IAccentColor.Name => DefaultText;
 
-        string IAccentColor.TranslatedName
-        {
-            get { return DefaultText; }
-        }
+        string IAccentColor.TranslatedName => DefaultText;
 
         void IAccentColor.ApplyTheme()
         {
             ApplicationThemeManager.Instance.LoadResource("accentcolor", _accentColorResourceDictionary);
         }
 
-        ResourceDictionary IAccentColor.ResourceDictionary
-        {
-            get { return _accentColorResourceDictionary; }
-        }
+        ResourceDictionary IAccentColor.ResourceDictionary => _accentColorResourceDictionary;
 
         #endregion
 
@@ -176,25 +161,16 @@ namespace Hurricane.Designer.Data
 
         private ResourceDictionary _appThemeResourceDictionary;
 
-        string IAppTheme.Name
-        {
-            get { return DefaultText; }
-        }
+        string IAppTheme.Name => DefaultText;
 
-        string IAppTheme.TranslatedName
-        {
-            get { return DefaultText; }
-        }
+        string IAppTheme.TranslatedName => DefaultText;
 
         void IAppTheme.ApplyTheme()
         {
             ApplicationThemeManager.Instance.LoadResource("apptheme", _appThemeResourceDictionary);
         }
 
-        ResourceDictionary IAppTheme.ResourceDictionary
-        {
-            get { return _appThemeResourceDictionary; }
-        }
+        ResourceDictionary IAppTheme.ResourceDictionary => _appThemeResourceDictionary;
 
         #endregion
 
@@ -206,29 +182,14 @@ namespace Hurricane.Designer.Data
             return new Uri(_backgroundPath, UriKind.Absolute);
         }
 
-        bool IApplicationBackground.IsAnimated
-        {
-            get { return GeneralHelper.IsVideo(BackgroundName); }
-        }
+        bool IApplicationBackground.IsAnimated => GeneralHelper.IsVideo(BackgroundName);
 
-        bool IApplicationBackground.IsAvailable
-        {
-            get { return true; }
-        }
+        bool IApplicationBackground.IsAvailable => true;
 
-        string IApplicationBackground.DisplayText
-        {
-            get { return DefaultText; }
-        }
+        string IApplicationBackground.DisplayText => DefaultText;
 
         #endregion
 
-        public string DefaultText
-        {
-            get
-            {
-                return Application.Current.Resources["FromThemePack"].ToString();
-            }
-        }
+        public string DefaultText => Application.Current.Resources["FromThemePack"].ToString();
     }
 }

@@ -24,10 +24,7 @@ namespace Hurricane.ViewModels
     {
         #region "Singleton & Constructor"
         private static SettingsViewModel _instance;
-        public static SettingsViewModel Instance
-        {
-            get { return _instance ?? (_instance = new SettingsViewModel()); }
-        }
+        public static SettingsViewModel Instance => _instance ?? (_instance = new SettingsViewModel());
 
         private SettingsViewModel()
         {
@@ -41,20 +38,13 @@ namespace Hurricane.ViewModels
             CurrentLanguage = Config.Languages.First(x => x.Code == Config.Language);
         }
 
-        public MusicManager MusicManager { get { return MainViewModel.Instance.MusicManager; } }
-        public ApplicationThemeManager ApplicationThemeManager { get { return ApplicationThemeManager.Instance; } }
+        public MusicManager MusicManager => MainViewModel.Instance.MusicManager;
+        public ApplicationThemeManager ApplicationThemeManager => ApplicationThemeManager.Instance;
         public RegistryManager RegistryManager { get; set; }
 
-        public ConfigSettings Config
-        {
-            get { return HurricaneSettings.Instance.Config; }
-        }
+        public ConfigSettings Config => HurricaneSettings.Instance.Config;
 
-        public MainWindow BaseWindow
-        {
-            get { return (MainWindow)Application.Current.MainWindow; }
-        }
-
+        public MainWindow BaseWindow => (MainWindow)Application.Current.MainWindow;
 
         #endregion
 
@@ -257,14 +247,8 @@ namespace Hurricane.ViewModels
             }
         }
 
-        public string AppConnectionString
-        {
-            get
-            {
-                return string.Format("{0};{1};{2}", LocalIpAddress, Config.AppCommunicationSettings.Port,
-                    Config.AppCommunicationSettings.Password);
-            }
-        }
+        public string AppConnectionString =>
+            $"{LocalIpAddress};{Config.AppCommunicationSettings.Port};{Config.AppCommunicationSettings.Password}";
 
         public bool AppIsEnabled
         {

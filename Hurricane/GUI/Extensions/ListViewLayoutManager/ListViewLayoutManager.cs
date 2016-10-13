@@ -42,10 +42,8 @@ namespace Hurricane.GUI.Extensions.ListViewLayoutManager
         } // ListViewLayoutManager
 
         // ----------------------------------------------------------------------
-        public ListView ListView
-        {
-            get { return listView; }
-        } // ListView
+        public ListView ListView => listView;
+        // ListView
 
         // ----------------------------------------------------------------------
         public ScrollBarVisibility VerticalScrollBarVisibility

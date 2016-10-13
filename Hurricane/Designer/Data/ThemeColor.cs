@@ -29,14 +29,12 @@ namespace Hurricane.Designer.Data
 
         public string ID { get; set; }
 
-        public string Value
-        {
-            get { return ColorToString(Color, IsTransparencyEnabled); }
-        }
+        public string Value => ColorToString(Color, IsTransparencyEnabled);
 
         private string ColorToString(Color c, bool withTransparencyValue = true)
         {
-            return withTransparencyValue ? string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B) : string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
+            return withTransparencyValue ? $"#{c.A:X2}{c.R:X2}{c.G:X2}{c.B:X2}"
+                : $"{c.R:X2}{c.G:X2}{c.B:X2}";
         }
 
         public void SetValue(string content)

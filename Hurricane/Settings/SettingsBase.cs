@@ -16,8 +16,15 @@ namespace Hurricane.Settings
         {
             using (var writer = new StreamWriter(path))
             {
-                var serializer = new XmlSerializer(typeof(T));
-                serializer.Serialize(writer, this);
+                try
+                {
+                    var serializer = new XmlSerializer(typeof(T));
+                    serializer.Serialize(writer, this);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.ToString());
+                }
             }
         }
     }

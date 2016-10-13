@@ -5,6 +5,7 @@ using System.Windows;
 using CSCore;
 using CSCore.SoundOut;
 using CSCore.Streams;
+using CSCore.Streams.Effects;
 using Hurricane.Music.CustomEventArgs;
 using Hurricane.Music.MusicEqualizer;
 using Hurricane.Music.Track;
@@ -84,7 +85,7 @@ namespace Hurricane.Music.AudioEngine
                     _soundOut.Dispose();
                     _crossfade.CancelFading();
                 }
-                if (SoundSource != null) SoundSource.Dispose();
+                SoundSource?.Dispose();
             }
         }
 
@@ -142,10 +143,7 @@ namespace Hurricane.Music.AudioEngine
             }
         }
 
-        public long TrackLength
-        {
-            get { return SoundSource == null ? 0 : SoundSource.Length; }
-        }
+        public long TrackLength => SoundSource?.Length ?? 0;
 
         public PlaybackState CurrentState
         {
@@ -186,10 +184,7 @@ namespace Hurricane.Music.AudioEngine
 
         public IWaveSource SoundSource { get; protected set; }
 
-        public ConfigSettings Settings
-        {
-            get { return HurricaneSettings.Instance.Config; }
-        }
+        public ConfigSettings Settings => HurricaneSettings.Instance.Config;
 
         public SoundOutManager SoundOutManager { get; set; }
 
@@ -213,24 +208,21 @@ namespace Hurricane.Music.AudioEngine
             set { if (SetProperty(value, ref _equalizerSettings)) value.EqualizerChanged += value_EqualizerChanged; }
         }
 
-        public bool IsPlaying
-        {
-            get { return (_soundOut != null && (!_isfadingout && _soundOut.PlaybackState == PlaybackState.Playing)); }
-        }
+        public bool IsPlaying => (_soundOut != null && (!_isfadingout && _soundOut.PlaybackState == PlaybackState.Playing));
 
         protected void OnTrackFinished()
         {
-            if (TrackFinished != null) TrackFinished(this, EventArgs.Empty);
+            TrackFinished?.Invoke(this, EventArgs.Empty);
         }
 
         protected void OnTrackChanged()
         {
-            if (TrackChanged != null) TrackChanged(this, new TrackChangedEventArgs(CurrentTrack));
+            TrackChanged?.Invoke(this, new TrackChangedEventArgs(CurrentTrack));
         }
 
         protected void OnSoundOutErrorOccurred(string message)
         {
-            if (SoundOutErrorOccurred != null) SoundOutErrorOccurred(this, message);
+            SoundOutErrorOccurred?.Invoke(this, message);
         }
 
         private async void SetSoundSourcePosition(long value)
@@ -244,10 +236,9 @@ namespace Hurricane.Music.AudioEngine
                 return;
             }
 
-            if (PositionChanged != null)
-                PositionChanged(this,
-                    new PositionChangedEventArgs((int) CurrentTrackPosition.TotalSeconds,
-                        (int) CurrentTrackLength.TotalSeconds));
+            PositionChanged?.Invoke(this,
+    new PositionChangedEventArgs((int)CurrentTrackPosition.TotalSeconds,
+        (int)CurrentTrackLength.TotalSeconds));
         }
 
         private void value_EqualizerChanged(object sender, EqualizerChangedEventArgs e)
@@ -308,12 +299,12 @@ namespace Hurricane.Music.AudioEngine
                     track.IsOpened = false;
                     IsLoading = false;
                     CurrentTrack = null;
-                    if (ExceptionOccurred != null) ExceptionOccurred(this, (Exception) result.CustomState);
+                    ExceptionOccurred?.Invoke(this, (Exception) result.CustomState);
                     StopPlayback();
                     return false;
             }
 
-            if (Settings.SampleRate == -1 && SoundSource.WaveFormat.SampleRate < 44100)
+            if (SoundSource != null && (Settings.SampleRate == -1 && SoundSource.WaveFormat.SampleRate < 44100))
             {
                 SoundSource = SoundSource.ChangeSampleRate(44100);
             }
@@ -353,7 +344,7 @@ namespace Hurricane.Music.AudioEngine
 
             CurrentStateChanged();
             _soundOut.Volume = Volume;
-            if (StartVisualization != null) StartVisualization(this, EventArgs.Empty);
+            StartVisualization?.Invoke(this, EventArgs.Empty);
             track.LastTimePlayed = DateTime.Now;
             if (_crossfade.IsCrossfading)
                 _fader.CrossfadeIn(_soundOut, Volume);
@@ -365,8 +356,7 @@ namespace Hurricane.Music.AudioEngine
 
         private async Task<Result> SetSoundSource(PlayableBase track)
         {
-            if (_cts != null)
-                _cts.Cancel();
+            _cts?.Cancel();
             _cts = new CancellationTokenSource();
             var token = _cts.Token;
             IWaveSource result;
@@ -470,8 +460,8 @@ namespace Hurricane.Music.AudioEngine
         {
             OnPropertyChanged("IsPlaying");
             OnPropertyChanged("CurrentState");
-            if (PlayStateChanged != null) PlayStateChanged(this, EventArgs.Empty);
-            if (PlaybackStateChanged != null) PlaybackStateChanged(this, new PlayStateChangedEventArgs(CurrentState));
+            PlayStateChanged?.Invoke(this, EventArgs.Empty);
+            PlaybackStateChanged?.Invoke(this, new PlayStateChangedEventArgs(CurrentState));
         }
 
         private void notificationSource_SingleBlockRead(object sender, SingleBlockReadEventArgs e)
@@ -522,7 +512,7 @@ namespace Hurricane.Music.AudioEngine
                 StopPlayback();
                 _soundOut.Dispose();
             }
-            if (SoundSource != null) SoundSource.Dispose();
+            SoundSource?.Dispose();
             RefreshSoundOut();
             if (CurrentTrack != null)
             {

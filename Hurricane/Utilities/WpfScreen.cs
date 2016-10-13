@@ -83,10 +83,7 @@ namespace Hurricane.Utilities
             }
         }
 
-        public static WpfScreen Primary
-        {
-            get { return new WpfScreen(Screen.PrimaryScreen); }
-        }
+        public static WpfScreen Primary => new WpfScreen(Screen.PrimaryScreen);
 
         private readonly Screen _screen;
 
@@ -95,15 +92,9 @@ namespace Hurricane.Utilities
             _screen = screen;
         }
 
-        public Rect DeviceBounds
-        {
-            get { return GetRect(_screen.Bounds); }
-        }
+        public Rect DeviceBounds => GetRect(_screen.Bounds);
 
-        public Rect WorkingArea
-        {
-            get { return GetRect(_screen.WorkingArea); }
-        }
+        public Rect WorkingArea => GetRect(_screen.WorkingArea);
 
         private Rect GetRect(Rectangle value)
         {
@@ -116,14 +107,8 @@ namespace Hurricane.Utilities
             };
         }
 
-        public bool IsPrimary
-        {
-            get { return _screen.Primary; }
-        }
+        public bool IsPrimary => _screen.Primary;
 
-        public string DeviceName
-        {
-            get { return _screen.DeviceName; }
-        }
+        public string DeviceName => _screen.DeviceName;
     }
 }

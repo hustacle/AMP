@@ -64,18 +64,12 @@ namespace Hurricane.GUI.Behaviors
                 return result;
             }
 
-            public override string RegexPattern
-            {
-                get { return "^##(?<text>(.*?))$"; }
-            }
+            public override string RegexPattern => "^##(?<text>(.*?))$";
         }
 
         class EnumerationRule : FormatRule
         {
-            public override string RegexPattern
-            {
-                get { return "^- (?<text>(.*?))$"; }
-            }
+            public override string RegexPattern => "^- (?<text>(.*?))$";
 
             public override IList<Run> GetRun(Match regexMatch)
             {
@@ -85,10 +79,7 @@ namespace Hurricane.GUI.Behaviors
 
         class ItalicRule : FormatRule
         {
-            public override string RegexPattern
-            {
-                get { return @"^\[i\](?<text>(.*?))$"; }
-            }
+            public override string RegexPattern => @"^\[i\](?<text>(.*?))$";
 
             public override IList<Run> GetRun(Match regexMatch)
             {

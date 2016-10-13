@@ -190,19 +190,10 @@ namespace Hurricane.Designer.Data.ThemeData
             return appTheme;
         }
 
-        public override string Source
-        {
-            get { return Properties.Resources.AppTheme; }
-        }
+        public override string Source => Properties.Resources.AppTheme;
 
-        public override string Filter
-        {
-            get { return string.Format("{0}|*.xaml", Application.Current.Resources["AppTheme"]); }
-        }
+        public override string Filter => $"{Application.Current.Resources["AppTheme"]}|*.xaml";
 
-        public override string BaseDirectory
-        {
-            get { return HurricaneSettings.Paths.AppThemesDirectory; }
-        }
+        public override string BaseDirectory => HurricaneSettings.Paths.AppThemesDirectory;
     }
 }

@@ -41,9 +41,9 @@
             <ListBoxItem Content="{DynamicResource Playback}" />
             <ListBoxItem Content="{DynamicResource Appearance}" />
             <ListBoxItem Content="{DynamicResource Behaviour}" />
-            <ListBoxItem Content="API" />
-            <!-- <ListBoxItem Content="{DynamicResource StreamingServices}"/> -->
-            <ListBoxItem Content="{DynamicResource Reset}" />
+            <!--<ListBoxItem Content="API" />-->
+            <ListBoxItem Content="{DynamicResource Streams}"/> 
+            <!--<ListBoxItem Content="{DynamicResource Reset}" />-->
             <ListBoxItem Content="{DynamicResource Language}" />
         </ListBox>
         <TabControl x:Name="TabControl"
@@ -355,7 +355,7 @@
                                   ToolTip="{DynamicResource PreferFavoriteDescription}" />
                         <TextBlock Margin="0,30,0,0"
                                    Style="{StaticResource TextBlockHeader}"
-                                   Text="MAGIC ARROW" />
+                                   Text="{DynamicResource MagicArrow}" />
                         <CheckBox Margin="0,10,0,0"
                                   Content="{DynamicResource ShowMagicArrowBelowCursor}"
                                   IsChecked="{Binding Config.ShowMagicArrowBelowCursor}" />
@@ -476,7 +476,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="API">
+            <!--<TabItem Header="API">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -617,40 +617,59 @@
                         </ListView>
                     </StackPanel>
                 </Grid>
-            </TabItem>
-            <!-- <TabItem Header="Streaming Services">
-                <ItemsControl Margin="10" ItemsSource="{Binding MusicManager.TrackSearcher.MusicApis}">
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ApiSettings}" Value="{x:Null}">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="10" Background="{StaticResource WhiteBrush}">
-                                <Grid.Effect>
-                                    <DropShadowEffect BlurRadius="7"
-                                                      Opacity="0.2"
-                                                      RenderingBias="Quality"
-                                                      ShadowDepth="0"
-                                                      Color="{StaticResource BlackColor}" />
-                                </Grid.Effect>
-                                <StackPanel Margin="10" Orientation="Vertical">
-                                    <TextBlock FontSize="24" Text="{Binding ServiceName}" />
-                                    <ContentControl Margin="0,10,0,0"
-                                                    Content="{Binding ApiSettings}"
-                                                    SnapsToDevicePixels="True" />
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
             </TabItem>-->
-            <TabItem Header="Reset">
+            <TabItem Header="Streaming Services">
+                <ScrollViewer>
+                    <StackPanel Margin="10" Orientation="Vertical">
+                        <TextBlock Style="{StaticResource TextBlockHeader}" behaviors:TextBlockBehavior.UpperText="{DynamicResource Authorization}" />
+                        <TextBlock Margin="0,15,0,0" Text="{DynamicResource SecretKey}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <TextBox Width="250" Text="{Binding Config.PersonalCode}" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource TextBlockHeader}" Margin="0,15,0,0" behaviors:TextBlockBehavior.UpperText="{DynamicResource Download}" />
+                        <TextBlock Margin="0,15,0,0" Text="{DynamicResource Bitrate}" />
+                        <ComboBox Width="250"
+                                          Margin="0,10,0,0"
+                                          HorizontalAlignment="Left"
+                                          SelectedIndex="{Binding Config.DownloadBitrate}">
+                            <ComboBoxItem Content="{DynamicResource Lossless}" />
+                            <ComboBoxItem Content="320K" />
+                            <ComboBoxItem Content="192K" />
+                            <ComboBoxItem Content="128K" />
+                        </ComboBox>
+                        <TextBlock Margin="0,15,0,0" Text="{DynamicResource LosslessPerfer}" />
+                        <ComboBox Width="250"
+                                          Margin="0,10,0,0"
+                                          HorizontalAlignment="Left"
+                                          SelectedIndex="{Binding Config.LosslessPrefer}">
+                            <ComboBoxItem Content="FLAC" />
+                            <ComboBoxItem Content="APE" />
+                            <ComboBoxItem Content="WAV" />
+                        </ComboBox>
+                        <TextBlock Margin="0,15,0,0" Text="音乐命名格式" />
+                        <ComboBox Width="250"
+                                          Margin="0,10,0,0"
+                                          HorizontalAlignment="Left"
+                                          SelectedIndex="{Binding Config.FileNameFormat}">
+                            <ComboBoxItem Content="歌曲名" />
+                            <ComboBoxItem Content="歌手 - 歌曲名" />
+                            <ComboBoxItem Content="歌曲名 - 歌手" />
+                            <ComboBoxItem Content="歌曲序号.歌曲名" />
+                        </ComboBox>
+                        <TextBlock Margin="0,15,0,0" Text="{DynamicResource 文件只能分类}" />
+                        <ComboBox Width="250"
+                                          Margin="0,10,0,0"
+                                          HorizontalAlignment="Left"
+                                          SelectedIndex="{Binding Config.FileFloderFormat}">
+                            <ComboBoxItem Content="不分文件夹" />
+                            <ComboBoxItem Content="按歌手分文件夹" />
+                            <ComboBoxItem Content="按专辑分文件夹" />
+                            <ComboBoxItem Content="按歌手\专辑分文件夹" />
+                        </ComboBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <!--<TabItem Header="Reset">
                 <StackPanel Margin="10" Orientation="Vertical">
                     <TextBlock Style="{StaticResource TextBlockHeader}" behaviors:TextBlockBehavior.UpperText="{DynamicResource ImportTrack}" />
                     <Button Width="200"
@@ -689,7 +708,7 @@
                         </Button.Style>
                     </Button>
                 </StackPanel>
-            </TabItem>
+            </TabItem>-->
             <TabItem Header="Language">
                 <ListBox Margin="5"
                          Background="Transparent"

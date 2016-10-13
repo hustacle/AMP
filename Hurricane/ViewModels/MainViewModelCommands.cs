@@ -134,7 +134,8 @@ namespace Hurricane.ViewModels
                     {
                         CheckFileExists = true,
                         Title = Application.Current.Resources["SelectedFiles"].ToString(),
-                        Filter = string.Format("{0}|{1};{2}|{3}|*.*", Application.Current.Resources["SupportedFiles"], GeneralHelper.GetFileDialogFilterFromArray(CodecFactory.Instance.GetSupportedFileExtensions()), GeneralHelper.GetFileDialogFilterFromArray(Playlists.GetSupportedFileExtensions()), Application.Current.Resources["AllFiles"]),
+                        Filter =
+                            $"{Application.Current.Resources["SupportedFiles"]}|{GeneralHelper.GetFileDialogFilterFromArray(CodecFactory.Instance.GetSupportedFileExtensions())};{GeneralHelper.GetFileDialogFilterFromArray(Playlists.GetSupportedFileExtensions())}|{Application.Current.Resources["AllFiles"]}|*.*",
                         Multiselect = true
                     };
                     if (ofd.ShowDialog(_baseWindow) == true)
@@ -561,7 +562,7 @@ namespace Hurricane.ViewModels
                     if (parameter == null || string.IsNullOrEmpty(parameter.ToString())) return;
                     var file = new FileInfo(parameter.ToString());
                     if (!file.Exists) return;
-                    Process.Start("explorer.exe", string.Format("/select,\"{0}\"", file.FullName));
+                    Process.Start("explorer.exe", $"/select,\"{file.FullName}\"");
                 }));
             }
         }

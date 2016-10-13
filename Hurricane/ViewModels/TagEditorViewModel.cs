@@ -81,7 +81,8 @@ namespace Hurricane.ViewModels
                 {
                     var ofd = new OpenFileDialog()
                     {
-                        Filter = string.Format("{0} (*.txt)|*.txt|{1} (*.*)|*.*", Application.Current.FindResource("TextFiles"), Application.Current.FindResource("AllFiles"))
+                        Filter =
+                            $"{Application.Current.FindResource("TextFiles")} (*.txt)|*.txt|{Application.Current.FindResource("AllFiles")} (*.*)|*.*"
                     };
                     if (ofd.ShowDialog() == true)
                     {
@@ -101,7 +102,8 @@ namespace Hurricane.ViewModels
                 {
                     var sfd = new SaveFileDialog()
                     {
-                        Filter = string.Format("{0} (*.txt)|*.txt|{1} (*.*)|*.*", Application.Current.FindResource("TextFiles"), Application.Current.FindResource("AllFiles"))
+                        Filter =
+                            $"{Application.Current.FindResource("TextFiles")} (*.txt)|*.txt|{Application.Current.FindResource("AllFiles")} (*.*)|*.*"
                     };
                     if (sfd.ShowDialog() == true)
                     {

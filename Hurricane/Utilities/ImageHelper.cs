@@ -92,7 +92,8 @@ namespace Hurricane.Utilities
         /// <returns>The icon</returns>
         public static Icon GetIconFromResource(string path)
         {
-            var streamResourceInfo = Application.GetResourceStream(new Uri(string.Format("pack://application:,,,/Hurricane;component/{0}", path)));
+            var streamResourceInfo = Application.GetResourceStream(new Uri(
+                $"pack://application:,,,/Hurricane;component/{path}"));
             if (streamResourceInfo == null)
                 throw new ArgumentException(path);
             return new Icon(streamResourceInfo.Stream);

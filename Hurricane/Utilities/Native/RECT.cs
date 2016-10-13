@@ -14,15 +14,9 @@ namespace Hurricane.Utilities.Native
 
         public static readonly RECT Empty;
 
-        public int Width
-        {
-            get { return Math.Abs(right - left); }  // Abs needed for BIDI OS
-        }
+        public int Width => Math.Abs(right - left);
 
-        public int Height
-        {
-            get { return bottom - top; }
-        }
+        public int Height => bottom - top;
 
         public RECT(int left, int top, int right, int bottom)
         {
@@ -40,14 +34,7 @@ namespace Hurricane.Utilities.Native
             bottom = rcSrc.bottom;
         }
 
-        public bool IsEmpty
-        {
-            get
-            {
-                // BUGBUG : On Bidi OS (hebrew arabic) left > right
-                return left >= right || top >= bottom;
-            }
-        }
+        public bool IsEmpty => left >= right || top >= bottom;
 
         public override string ToString()
         {

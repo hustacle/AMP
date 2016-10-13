@@ -18,10 +18,7 @@ namespace Hurricane.Settings.Themes
         #region "Singleton & Constructor"
 
         private static ApplicationThemeManager _instance;
-        public static ApplicationThemeManager Instance
-        {
-            get { return _instance ?? (_instance = new ApplicationThemeManager()); }
-        }
+        public static ApplicationThemeManager Instance => _instance ?? (_instance = new ApplicationThemeManager());
 
 
         private ApplicationThemeManager()
@@ -32,40 +29,16 @@ namespace Hurricane.Settings.Themes
         #endregion
 
         private ObservableCollection<AccentColorBase> _accentColors;
-        public ObservableCollection<AccentColorBase> AccentColors
-        {
-            get
-            {
-                return _accentColors;
-            }
-        }
+        public ObservableCollection<AccentColorBase> AccentColors => _accentColors;
 
         private ObservableCollection<AppThemeBase> _appThemes;
-        public ObservableCollection<AppThemeBase> AppThemes
-        {
-            get
-            {
-                return _appThemes;
-            }
-        }
+        public ObservableCollection<AppThemeBase> AppThemes => _appThemes;
 
         private ObservableCollection<ThemePack> _themePacks;
-        public ObservableCollection<ThemePack> ThemePacks
-        {
-            get
-            {
-                return _themePacks;
-            }
-        }
+        public ObservableCollection<ThemePack> ThemePacks => _themePacks;
 
         private ObservableCollection<IAudioVisualisationContainer> _audioVisualisations;
-        public ObservableCollection<IAudioVisualisationContainer> AudioVisualisations
-        {
-            get
-            {
-                return _audioVisualisations;
-            }
-        }
+        public ObservableCollection<IAudioVisualisationContainer> AudioVisualisations => _audioVisualisations;
 
         public void Refresh()
         {

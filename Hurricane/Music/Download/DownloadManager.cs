@@ -2,14 +2,19 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using Hurricane.Music.Track;
+using Hurricane.Music.Track.WebApi.AnyListen;
 using Hurricane.Utilities;
 using Hurricane.ViewModelBase;
 using TagLib;
+using TagLib.Id3v2;
 using File = TagLib.File;
+using Tag = TagLib.Id3v2.Tag;
 
 namespace Hurricane.Music.Download
 {
@@ -86,6 +91,9 @@ namespace Hurricane.Music.Download
                     case DownloadMethod.youtube_dl:
                         await youtube_dl.Instance.Download(download.DownloadParameter, fileName, progressChangedAction);
                         break;
+                    case DownloadMethod.AnyListen:
+                        await AnyListenDownloader.DownloadAnyListenTrack(download.DownloadParameter, fileName, progressChangedAction);
+                        break;
                     default:
                         throw new ArgumentException();
                 }
@@ -105,6 +113,8 @@ namespace Hurricane.Music.Download
                     return ".mp3";
                 case DownloadMethod.youtube_dl:
                     return ".m4a";
+                case DownloadMethod.AnyListen:
+                    return CommonHelper.GetFormat(track.DownloadParameter);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -136,32 +146,194 @@ namespace Hurricane.Music.Download
             if (!filePath.Exists) return;
             try
             {
+                var songResult = information.WebTrack;
                 using (var file = File.Create(filePath.FullName))
                 {
-                    file.Tag.Album = information.Album;
-                    file.Tag.Performers = new[] { information.Artist };
-                    file.Tag.Year = information.Year;
-                    if (information.Genres != null)
-                        file.Tag.Genres = information.Genres.Select(x => x.ToString()).ToArray();
-                    file.Tag.Title = information.Title;
-                    var image = await information.GetImage();
-                    if (image != null)
+                    Tag.DefaultVersion = 3;
+                    Tag.ForceDefaultVersion = true;
+                    Tag.DefaultEncoding = StringType.UTF8;
+                    if (file == null)
                     {
-                        byte[] data;
-                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-                        encoder.Frames.Add(BitmapFrame.Create(image));
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            encoder.Save(ms);
-                            data = ms.ToArray();
-                        }
-                        file.Tag.Pictures = new IPicture[] { new Picture(new ByteVector(data, data.Length)) };
+                        return;
                     }
-                    await Task.Run(() => file.Save());
+                    if (filePath.FullName.Contains("ogg"))
+                    {
+                        var id3V1 = file.GetTag(TagTypes.Id3v1, true);
+                        if (!string.IsNullOrEmpty(songResult.SongName))
+                        {
+                            id3V1.Title = songResult.SongName;
+                        }
+                        if (!string.IsNullOrEmpty(songResult.ArtistName))
+                        {
+                            id3V1.Performers = songResult.ArtistName.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        }
+                        if (!string.IsNullOrEmpty(songResult.AlbumName))
+                        {
+                            id3V1.Album = songResult.AlbumName;
+                        }
+                        if (songResult.TrackNum != 0)
+                        {
+                            id3V1.Track = Convert.ToUInt32(songResult.TrackNum);
+                        }
+                        if (!string.IsNullOrEmpty(songResult.Year))
+                        {
+                            id3V1.Year = Convert.ToUInt32(songResult.Year.Substring(0, 4));
+                        }
+                        id3V1.Comment = "雅音FM";
+                    }
+                    else
+                    {
+                        TagLib.Tag tags;
+                        if (filePath.FullName.Contains("ape"))
+                        {
+                            tags = file.GetTag(TagTypes.Ape, true);
+                        }
+                        else if (filePath.FullName.Contains("flac"))
+                        {
+                            tags = file.GetTag(TagTypes.FlacMetadata, true);
+                        }
+                        else
+                        {
+                            tags = (Tag)file.GetTag(TagTypes.Id3v2, true);
+                        }
+                        var picBasePath = Path.Combine(Environment.CurrentDirectory, "Pic");
+                        if (!Directory.Exists(picBasePath))
+                        {
+                            Directory.CreateDirectory(picBasePath);
+                        }
+                        var picPath = Path.Combine(picBasePath, songResult.SongId + ".jpg");
+                        try
+                        {
+                            
+                            if (!string.IsNullOrEmpty(songResult.PicUrl))
+                            {
+                                if (!System.IO.File.Exists(picPath))
+                                {
+                                    await new WebClient().DownloadFileTaskAsync(songResult.PicUrl, picPath);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            CommonHelper.AddLog(ex.ToString());
+                        }
+                        try
+                        {
+                            if (System.IO.File.Exists(picPath))
+                            {
+                                var picture = new Picture(picPath);
+                                var pic = new AttachedPictureFrame(picture)
+                                {
+                                    MimeType = MediaTypeNames.Image.Jpeg,
+                                    Description = "YA.jpg",
+                                    Type = PictureType.FrontCover
+                                };
+                                tags.Pictures = new IPicture[] { pic };
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            CommonHelper.AddLog(ex.ToString());
+                        }
+                        //var image = await information.GetImage();
+                        //if (image != null)
+                        //{
+                        //    byte[] data;
+                        //    JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                        //    encoder.Frames.Add(BitmapFrame.Create(image));
+                        //    using (MemoryStream ms = new MemoryStream())
+                        //    {
+                        //        encoder.Save(ms);
+                        //        data = ms.ToArray();
+                        //    }
+                        //    file.Tag.Pictures = new IPicture[] { new Picture(new ByteVector(data, data.Length)) };
+                        //}
+                        if (!string.IsNullOrEmpty(songResult.SongName))
+                        {
+                            tags.Title = songResult.SongName;
+                        }
+                        if (!string.IsNullOrEmpty(songResult.ArtistName))
+                        {
+                            tags.Performers = songResult.ArtistName.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        }
+                        if (!string.IsNullOrEmpty(songResult.AlbumName))
+                        {
+                            tags.Album = songResult.AlbumName;
+                        }
+                        if (songResult.TrackNum != 0)
+                        {
+                            tags.Track = Convert.ToUInt32(songResult.TrackNum);
+                        }
+                        if (!string.IsNullOrEmpty(songResult.Year))
+                        {
+                            tags.Year = Convert.ToUInt32(songResult.Year.Substring(0, 4));
+                            if (tags.TagTypes == TagTypes.Id3v2)
+                            {
+                                var dat = TextInformationFrame.Get((Tag)tags, "TDAT", true);
+                                dat.Text = new[] { songResult.Year };
+                            }
+                        }
+                        tags.Copyright = "雅音FM";
+                        if (!string.IsNullOrEmpty(songResult.AlbumArtist))
+                        {
+                            tags.Performers = songResult.AlbumArtist.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                        }
+                        if (tags.TagTypes == TagTypes.Id3v2)
+                        {
+                            if (!string.IsNullOrEmpty(songResult.Company))
+                            {
+                                var cmp = TextInformationFrame.Get((Tag)tags, "TPUB", true);
+                                cmp.Text = new[] { songResult.Company };
+                            }
+                            if (!string.IsNullOrEmpty(songResult.Language))
+                            {
+                                var cmp = TextInformationFrame.Get((Tag)tags, "TLAN", true);
+                                cmp.Text = new[] { songResult.Language };
+                            }
+                            if (songResult.Length != 0)
+                            {
+                                var cmp = TextInformationFrame.Get((Tag)tags, "TLEN", true);
+                                cmp.Text = new[] { songResult.Length.ToString() };
+                            }
+                            if (!string.IsNullOrEmpty(songResult.SongSubName))
+                            {
+                                var title = TextInformationFrame.Get((Tag)tags, "TIT3", true);
+                                title.Text = new[] { songResult.SongSubName };
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(songResult.LrcUrl))
+                        {
+                            try
+                            {
+                                var html = await new WebClient { Encoding = Encoding.UTF8 }.DownloadStringTaskAsync(new Uri(songResult.LrcUrl));
+                                if (!string.IsNullOrEmpty(html))
+                                {
+                                    tags.Lyrics = html;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                //
+                            }
+                        }
+                        try
+                        {
+                            System.IO.File.Delete(picPath);
+                        }
+                        catch (Exception)
+                        {
+                            //
+                        }
+                        // ReSharper disable once AccessToDisposedClosure
+                        await Task.Run(() => file.Save());
+                    }
+                    
                 }
             }
-            catch (CorruptFileException)
+            catch (Exception ex)
             {
+                CommonHelper.AddLog(ex.ToString());
             }
         }
 

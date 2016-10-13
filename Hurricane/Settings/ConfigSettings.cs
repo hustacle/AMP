@@ -6,7 +6,6 @@ using System.Threading;
 using System.Windows;
 using System.Xml.Serialization;
 using CSCore.SoundOut;
-using Newtonsoft.Json;
 using Hurricane.AppCommunication;
 using Hurricane.Music.AudioEngine;
 using Hurricane.Music.Download;
@@ -35,6 +34,14 @@ namespace Hurricane.Settings
 
         //Magic Arrow
         public bool ShowMagicArrowBelowCursor { get; set; }
+
+
+        //Search
+        public string PersonalCode { get; set; }
+        public int DownloadBitrate { get; set; }
+        public int LosslessPrefer { get; set; }
+        public int FileNameFormat { get; set; }
+        public int FileFloderFormat { get; set; }
 
         //Design
         public ApplicationDesign ApplicationDesign { get; set; }
@@ -95,26 +102,21 @@ namespace Hurricane.Settings
 
         private List<LanguageInfo> _languages;
         [XmlIgnore]
-        public List<LanguageInfo> Languages
+        public List<LanguageInfo> Languages => _languages ?? (_languages = new List<LanguageInfo>
         {
-            get
-            {
-                //Language codes: http://www.lingoes.net/en/translator/langcode.htm
-                return _languages ?? (_languages = new List<LanguageInfo>
-                {
-                    new LanguageInfo("Deutsch", "/Resources/Languages/Hurricane.de-de.xaml",
-                        new Uri("/Resources/Languages/Icons/de.png", UriKind.Relative), "Alkaline", "de"),
-                    new LanguageInfo("English", "/Resources/Languages/Hurricane.en-us.xaml",
-                        new Uri("/Resources/Languages/Icons/us.png", UriKind.Relative), "Alkaline", "en"),
-                    new LanguageInfo("Nederlands", "/Resources/Languages/Hurricane.nl-nl.xaml",
-                        new Uri("/Resources/Languages/Icons/nl.png", UriKind.Relative), "DrawCase", "nl"),
-                    new LanguageInfo("Suomi", "/Resources/Languages/Hurricane.fi-fi.xaml",
-                        new Uri("/Resources/Languages/Icons/fi.png", UriKind.Relative), "Väinämö Vettenranta", "fi"),
-                    new LanguageInfo("Russian", "/Resources/Languages/Hurricane.ru-ru.xaml",
-                        new Uri("/Resources/Languages/Icons/ru.png", UriKind.Relative), "Barmin Alexander", "ru")
-                });
-            }
-        }
+            new LanguageInfo("简体中文", "/Resources/Languages/Hurricane.zh-cn.xaml",
+                new Uri("/Resources/Languages/Icons/cn.png", UriKind.Relative), "Shelher", "zh"),
+            new LanguageInfo("Deutsch", "/Resources/Languages/Hurricane.de-de.xaml",
+                new Uri("/Resources/Languages/Icons/de.png", UriKind.Relative), "Alkaline", "de"),
+            new LanguageInfo("English", "/Resources/Languages/Hurricane.en-us.xaml",
+                new Uri("/Resources/Languages/Icons/us.png", UriKind.Relative), "Alkaline", "en"),
+            new LanguageInfo("Nederlands", "/Resources/Languages/Hurricane.nl-nl.xaml",
+                new Uri("/Resources/Languages/Icons/nl.png", UriKind.Relative), "DrawCase", "nl"),
+            new LanguageInfo("Suomi", "/Resources/Languages/Hurricane.fi-fi.xaml",
+                new Uri("/Resources/Languages/Icons/fi.png", UriKind.Relative), "Väinämö Vettenranta", "fi"),
+            new LanguageInfo("Russian", "/Resources/Languages/Hurricane.ru-ru.xaml",
+                new Uri("/Resources/Languages/Icons/ru.png", UriKind.Relative), "Barmin Alexander", "ru")
+        });
 
         public override sealed void SetStandardValues()
         {
@@ -124,7 +126,7 @@ namespace Hurricane.Settings
             WaveSourceBits = 16;
             SampleRate = -1;
             var language = Languages.FirstOrDefault(x => x.Code == Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName);
-            Language = language == null ? "en" : language.Code;
+            Language = language == null ? "zh" : language.Code;
             Notification = NotificationType.Top;
             ApplicationDesign = new ApplicationDesign();
             ApplicationDesign.SetStandard();
@@ -133,7 +135,7 @@ namespace Hurricane.Settings
             PlaylistToImportTrack = null;
             LoadAlbumCoverFromInternet = true;
             DownloadAlbumCoverQuality = ImageQuality.Maximum;
-            SaveCoverLocal = false;
+            SaveCoverLocal = true;
             TrimTrackname = true;
             ShowArtistAndTitle = true;
             SoundOutMode = WasapiOut.IsSupportedOnCurrentPlatform ? SoundOutMode.WASAPI : SoundOutMode.DirectSound;
@@ -153,6 +155,8 @@ namespace Hurricane.Settings
             CheckForHurricaneUpdates = true;
             CheckForYoutubeDlUpdates = true;
             Passwords = new List<PasswordEntry>();
+            FileNameFormat = 1;
+            DownloadBitrate = 1;
         }
 
         public ConfigSettings()

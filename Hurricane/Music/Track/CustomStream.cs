@@ -15,18 +15,12 @@ namespace Hurricane.Music.Track
     public class CustomStream : StreamableBase
     {
         public string StreamUrl { get; set; }
-        public override bool IsInfinityStream
-        {
-            get { return IsInfinityStreamSerializable; }
-        }
+        public override bool IsInfinityStream => IsInfinityStreamSerializable;
 
         [XmlElement("IsInfinityStream")]
         public bool IsInfinityStreamSerializable { get; set; }
 
-        public override bool TrackExists
-        {
-            get { return true; }
-        }
+        public override bool TrackExists => true;
 
         public async override Task<bool> LoadInformation()
         {
@@ -38,10 +32,7 @@ namespace Hurricane.Music.Track
             Process.Start(StreamUrl);
         }
 
-        public override TrackType TrackType
-        {
-            get { return TrackType.Stream; }
-        }
+        public override TrackType TrackType => TrackType.Stream;
 
         public override Task<IWaveSource> GetSoundSource()
         {
@@ -73,18 +64,9 @@ namespace Hurricane.Music.Track
             get { throw new NotImplementedException(); }
         }
 
-        public override bool CanDownload
-        {
-            get { return false; }
-        }
+        public override bool CanDownload => false;
 
-        public override GeometryGroup ProviderVector
-        {
-            get
-            {
-                return GetProviderVector();
-            }
-        }
+        public override GeometryGroup ProviderVector => GetProviderVector();
 
         private static GeometryGroup _geometryGroup;
         public static GeometryGroup GetProviderVector()
@@ -127,14 +109,8 @@ namespace Hurricane.Music.Track
             return true;
         }
 
-        public override string Link
-        {
-            get { return StreamUrl; }
-        }
+        public override string Link => StreamUrl;
 
-        public override string Website
-        {
-            get { return new Uri(StreamUrl).Host; }
-        }
+        public override string Website => new Uri(StreamUrl).Host;
     }
 }

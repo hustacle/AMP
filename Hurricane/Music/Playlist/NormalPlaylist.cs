@@ -125,9 +125,6 @@ namespace Hurricane.Music.Playlist
             ShuffleList.Clear();
         }
 
-        public override bool CanEdit
-        {
-            get { return true; }
-        }
+        public override bool CanEdit => true;
     }
 }

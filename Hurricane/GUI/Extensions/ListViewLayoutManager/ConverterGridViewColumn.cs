@@ -35,10 +35,8 @@ namespace Hurricane.GUI.Extensions.ListViewLayoutManager
         } // ConverterGridViewColumn
 
         // ----------------------------------------------------------------------
-        public Type BindingType
-        {
-            get { return bindingType; }
-        } // BindingType
+        public Type BindingType => bindingType;
+        // BindingType
 
         // ----------------------------------------------------------------------
         protected abstract object ConvertValue(object value);

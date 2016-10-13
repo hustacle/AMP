@@ -7,42 +7,21 @@ namespace Hurricane.Settings.Themes.AudioVisualisation.RectangleVisualisation
     public class RectangleAudioVisualisation : AudioVisualisationBase
     {
         private IAudioVisualisationPlugin _loadedPlugin;
-        public override IAudioVisualisationPlugin Visualisation
-        {
-            get { return _loadedPlugin ?? (_loadedPlugin = new AudioVisualisationPlugin()); }
-        }
+        public override IAudioVisualisationPlugin Visualisation => _loadedPlugin ?? (_loadedPlugin = new AudioVisualisationPlugin());
 
-        public override string Name
-        {
-            get { return Application.Current.Resources["Rectangles"].ToString(); }
-        }
+        public override string Name => Application.Current.Resources["Rectangles"].ToString();
 
         public class AudioVisualisationPlugin : IAudioVisualisationPlugin
         {
             private IAudioVisualisation _advancedAudioVisualisation;
-            public IAudioVisualisation AdvancedWindowVisualisation
-            {
-                get
-                {
-                    return _advancedAudioVisualisation ??
-                           (_advancedAudioVisualisation = new AdvancedWindowAudioVisualisation());
-                }
-            }
+            public IAudioVisualisation AdvancedWindowVisualisation => _advancedAudioVisualisation ??
+                                                                      (_advancedAudioVisualisation = new AdvancedWindowAudioVisualisation());
 
             private IAudioVisualisation _smartWindowAudioVisualisation;
-            public IAudioVisualisation SmartWindowVisualisation
-            {
-                get
-                {
-                    return _smartWindowAudioVisualisation ??
-                           (_smartWindowAudioVisualisation = new SmartWindowAudioVisualisation());
-                }
-            }
+            public IAudioVisualisation SmartWindowVisualisation => _smartWindowAudioVisualisation ??
+                                                                   (_smartWindowAudioVisualisation = new SmartWindowAudioVisualisation());
 
-            public string Creator
-            {
-                get { return "Akaline"; }
-            }
+            public string Creator => "Akaline";
 
             private GeometryGroup _thumbnail;
             public GeometryGroup Thumbnail

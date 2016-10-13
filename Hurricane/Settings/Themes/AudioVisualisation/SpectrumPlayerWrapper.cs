@@ -29,13 +29,7 @@ namespace Hurricane.Settings.Themes.AudioVisualisation
             return _spectrumProvider.GetFFTFrequencyIndex(frequency);
         }
 
-        public bool IsPlaying
-        {
-            get
-            {
-                return _spectrumProvider.IsPlaying;
-            }
-        }
+        public bool IsPlaying => _spectrumProvider.IsPlaying;
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

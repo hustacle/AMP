@@ -13,7 +13,7 @@ namespace Hurricane.AppMainWindow.Messages
     public class WindowDialogService
     {
         public MainWindow BaseWindow { get; set; }
-        public WindowSkinConfiguration Configuration { get { return BaseWindow.HostedWindow.Configuration; } }
+        public WindowSkinConfiguration Configuration => BaseWindow.HostedWindow.Configuration;
 
 
         public WindowDialogService(MainWindow baseWindow)

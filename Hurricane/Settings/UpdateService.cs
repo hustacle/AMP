@@ -71,10 +71,7 @@ namespace Hurricane.Settings
         }
         #endregion
 
-        public string CurrentVersion
-        {
-            get { return GetCurrentAssemblyVersion(); }
-        }
+        public string CurrentVersion => GetCurrentAssemblyVersion();
 
         public string NewVersion { get; protected set; }
         public string Changelog { get; set; }
@@ -124,7 +121,7 @@ namespace Hurricane.Settings
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(asm.Location);
-            return String.Format("{0}.{1}.{2}", fvi.ProductMajorPart, fvi.ProductMinorPart, fvi.ProductBuildPart);
+            return $"{fvi.ProductMajorPart}.{fvi.ProductMinorPart}.{fvi.ProductBuildPart}";
         }
 
         public static void UpdateSettings(string baseDirectory)

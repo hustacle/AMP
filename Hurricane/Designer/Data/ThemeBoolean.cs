@@ -19,10 +19,7 @@ namespace Hurricane.Designer.Data
             }
         }
 
-        public string Value
-        {
-            get { return BooleanValue.ToString().ToLower(); }
-        }
+        public string Value => BooleanValue.ToString().ToLower();
 
         public void SetValue(string content)
         {

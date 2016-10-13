@@ -34,20 +34,11 @@ namespace Hurricane.Settings.Themes.Visual.AppThemes
         }
 
         [XmlIgnore]
-        public override ResourceDictionary ResourceDictionary
-        {
-            get { return new ResourceDictionary { Source = new Uri(Path.Combine(HurricaneSettings.Paths.AppThemesDirectory, Name + ".xaml"), UriKind.RelativeOrAbsolute) }; }
-        }
+        public override ResourceDictionary ResourceDictionary => new ResourceDictionary { Source = new Uri(Path.Combine(HurricaneSettings.Paths.AppThemesDirectory, Name + ".xaml"), UriKind.RelativeOrAbsolute) };
 
-        public override string TranslatedName
-        {
-            get { return Name; }
-        }
+        public override string TranslatedName => Name;
 
-        public override string Group
-        {
-            get { return Application.Current.Resources["Custom"].ToString(); }
-        }
+        public override string Group => Application.Current.Resources["Custom"].ToString();
 
         public static bool IsAppThemeDictionary(ResourceDictionary resources)
         {

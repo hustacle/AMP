@@ -71,19 +71,10 @@ namespace Hurricane.Designer.Data.ThemeData
             return accentColor;
         }
 
-        public override string Source
-        {
-            get { return Properties.Resources.AccentColor; }
-        }
+        public override string Source => Properties.Resources.AccentColor;
 
-        public override string Filter
-        {
-            get { return string.Format("{0}|*.xaml", Application.Current.Resources["AccentColorString"]); }
-        }
+        public override string Filter => $"{Application.Current.Resources["AccentColorString"]}|*.xaml";
 
-        public override string BaseDirectory
-        {
-            get { return HurricaneSettings.Paths.AccentColorsDirectory; }
-        }
+        public override string BaseDirectory => HurricaneSettings.Paths.AccentColorsDirectory;
     }
 }

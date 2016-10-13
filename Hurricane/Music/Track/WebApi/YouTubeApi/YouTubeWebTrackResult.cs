@@ -8,10 +8,7 @@ namespace Hurricane.Music.Track.WebApi.YouTubeApi
 {
     public class YouTubeWebTrackResult : WebTrackResultBase
     {
-        public override ProviderName ProviderName
-        {
-            get { return ProviderName.YouTube; }
-        }
+        public override ProviderName ProviderName => ProviderName.YouTube;
 
         public override PlayableBase ToPlayable()
         {
@@ -27,29 +24,14 @@ namespace Hurricane.Music.Track.WebApi.YouTubeApi
             return result;
         }
 
-        public override GeometryGroup ProviderVector
-        {
-            get { return YouTubeTrack.GetProviderVector(); }
-        }
+        public override GeometryGroup ProviderVector => YouTubeTrack.GetProviderVector();
 
-        public override bool CanDownload
-        {
-            get { return true; }
-        }
+        public override bool CanDownload => true;
 
-        public override string DownloadParameter
-        {
-            get { return Url; }
-        }
+        public override string DownloadParameter => Url;
 
-        public override string DownloadFilename
-        {
-            get { return Title.ToEscapedFilename(); }
-        }
+        public override string DownloadFilename => Title.ToEscapedFilename();
 
-        public override DownloadMethod DownloadMethod
-        {
-            get { return DownloadMethod.youtube_dl; }
-        }
+        public override DownloadMethod DownloadMethod => DownloadMethod.youtube_dl;
     }
 }

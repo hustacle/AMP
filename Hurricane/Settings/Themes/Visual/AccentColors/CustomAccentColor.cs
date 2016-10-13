@@ -34,35 +34,20 @@ namespace Hurricane.Settings.Themes.Visual.AccentColors
         }
 
         [XmlIgnore]
-        public override string TranslatedName
-        {
-            get { return Path.GetFileNameWithoutExtension(Name); }
-        }
+        public override string TranslatedName => Path.GetFileNameWithoutExtension(Name);
 
         private Brush _colorBrush;
         [XmlIgnore]
-        public override Brush ColorBrush
-        {
-            get { return _colorBrush ?? (_colorBrush = ResourceDictionary["AccentColorBrush"] as Brush); }
-        }
+        public override Brush ColorBrush => _colorBrush ?? (_colorBrush = ResourceDictionary["AccentColorBrush"] as Brush);
 
-        public override string Group
-        {
-            get { return Application.Current.Resources["Custom"].ToString(); }
-        }
+        public override string Group => Application.Current.Resources["Custom"].ToString();
 
         [XmlIgnore]
-        public override ResourceDictionary ResourceDictionary
+        public override ResourceDictionary ResourceDictionary => new ResourceDictionary
         {
-            get
-            {
-                return new ResourceDictionary
-                {
-                    Source =
-                        new Uri(Path.Combine(HurricaneSettings.Paths.AccentColorsDirectory, Name),
-                            UriKind.RelativeOrAbsolute)
-                };
-            }
-        }
+            Source =
+                new Uri(Path.Combine(HurricaneSettings.Paths.AccentColorsDirectory, Name),
+                    UriKind.RelativeOrAbsolute)
+        };
     }
 }

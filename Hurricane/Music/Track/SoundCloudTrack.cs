@@ -32,7 +32,8 @@ namespace Hurricane.Music.Track
         {
             using (var web = new WebClient { Proxy = null })
             {
-                var result = JsonConvert.DeserializeObject<ApiResult>(await web.DownloadStringTaskAsync(string.Format("https://api.soundcloud.com/tracks/{0}.json?client_id={1}", SoundCloudID, SensitiveInformation.SoundCloudKey)));
+                var result = JsonConvert.DeserializeObject<ApiResult>(await web.DownloadStringTaskAsync(
+                    $"https://api.soundcloud.com/tracks/{SoundCloudID}.json?client_id={SensitiveInformation.SoundCloudKey}"));
                 return LoadInformation(result);
             }
         }
@@ -49,6 +50,7 @@ namespace Hurricane.Music.Track
             Genres = new List<Genre> { StringToGenre(result.genre) };
             SoundCloudID = result.id;
             Uploader = result.user.username;
+            BitRate = "128K";
             Downloadable = result.downloadable;
             SetDuration(TimeSpan.FromSeconds(result.duration));
             return true;
@@ -62,9 +64,8 @@ namespace Hurricane.Music.Track
             {
                 var regex =
                     new Regex(HurricaneSettings.Instance.Config.LoadAlbumCoverFromInternet
-                        ? string.Format("^{0}_{1}.", SoundCloudID,
-                            SoundCloudApi.GetQualityModifier(HurricaneSettings.Instance.Config.DownloadAlbumCoverQuality))
-                        : string.Format("^{0}_", SoundCloudID));
+                        ? $"^{SoundCloudID}_{SoundCloudApi.GetQualityModifier(HurricaneSettings.Instance.Config.DownloadAlbumCoverQuality)}."
+                        : $"^{SoundCloudID}_");
 
                 var imageFile = albumCoverDirectory.GetFiles().FirstOrDefault(item => regex.IsMatch(item.Name.ToLower()));
                 if (imageFile != null)
@@ -104,8 +105,7 @@ namespace Hurricane.Music.Track
             return
                 Task.Run(() => CutWaveSource(CodecFactory.Instance.GetCodec(
                     new Uri(
-                        string.Format("https://api.soundcloud.com/tracks/{0}/stream?client_id={1}", SoundCloudID,
-                            SensitiveInformation.SoundCloudKey)))));
+                        $"https://api.soundcloud.com/tracks/{SoundCloudID}/stream?client_id={SensitiveInformation.SoundCloudKey}"))));
         }
 
         public override bool Equals(PlayableBase other)
@@ -131,44 +131,20 @@ namespace Hurricane.Music.Track
             return _geometryGroup;
         }
 
-        public override GeometryGroup ProviderVector
-        {
-            get { return GetProviderVector(); }
-        }
+        public override GeometryGroup ProviderVector => GetProviderVector();
 
-        public override string DownloadParameter
-        {
-            get { return SoundCloudID.ToString(); }
-        }
+        public override string DownloadParameter => SoundCloudID.ToString();
 
-        public override string DownloadFilename
-        {
-            get { return Title.ToEscapedFilename(); }
-        }
+        public override string DownloadFilename => Title.ToEscapedFilename();
 
-        public override DownloadMethod DownloadMethod
-        {
-            get { return DownloadMethod.SoundCloud; }
-        }
+        public override DownloadMethod DownloadMethod => DownloadMethod.SoundCloud;
 
-        public override bool CanDownload
-        {
-            get { return Downloadable; }
-        }
+        public override bool CanDownload => Downloadable;
 
-        public override string Link
-        {
-            get { return Url; }
-        }
+        public override string Link => Url;
 
-        public override string Website
-        {
-            get { return "https://soundcloud.com/"; }
-        }
+        public override string Website => "https://soundcloud.com/";
 
-        public override bool IsInfinityStream
-        {
-            get { return false; }
-        }
+        public override bool IsInfinityStream => false;
     }
 }

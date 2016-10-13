@@ -14,7 +14,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>C:\Users\Shelher\Desktop\AnyListen1.0.0\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -24,9 +24,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -55,9 +56,21 @@
   <PropertyGroup>
     <StartupObject>Hurricane.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>EBD5B15C6DACD580F2922A68D8D50B89AFE59598</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Hurricane_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSCore, Version=1.1.5697.25221, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSCore.1.1-alpha1\lib\net35-client\CSCore.dll</HintPath>
+    <Reference Include="CSCore, Version=1.1.5992.18249, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSCore.1.1.0\lib\net35-client\CSCore.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Exceptionless.Extras, Version=3.0.1319.0, Culture=neutral, processorArchitecture=MSIL">
@@ -76,11 +89,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Gma.QrCodeNet.Encoding.dll</HintPath>
     </Reference>
-    <Reference Include="GongSolutions.Wpf.DragDrop">
-      <HintPath>..\packages\gong-wpf-dragdrop.0.1.4.3\lib\net40\GongSolutions.Wpf.DragDrop.dll</HintPath>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.1.0.0\lib\net45\GongSolutions.Wpf.DragDrop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
-      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.5\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -89,8 +104,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.2-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -211,6 +226,7 @@
       <DependentUpon>VolumeIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="MagicArrow\WindowHider.cs" />
+    <Compile Include="Music\Download\AnyListenDownloader.cs" />
     <Compile Include="Music\Download\DownloadSettings.cs" />
     <Compile Include="Music\Download\ffmpeg.cs" />
     <Compile Include="Music\Download\GroovesharkApi.cs" />
@@ -221,9 +237,21 @@
     <Compile Include="Music\AudioEngine\SoundOutManager.cs" />
     <Compile Include="Music\Proxy\HttpProxy.cs" />
     <Compile Include="Music\Proxy\ProxyEntry.cs" />
+    <Compile Include="Music\Track\AnyListenTrack.cs" />
     <Compile Include="Music\Track\LocalTrackFragment.cs" />
     <Compile Include="Music\AudioEngine\CutSource.cs" />
     <Compile Include="Music\Track\CustomStream.cs" />
+    <Compile Include="Music\Track\SongResult.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\BdMusic.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\KgMusic.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\KwMusic.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\TtMusic.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\TxMusic.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\WyMusicApi.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\AnyListenWebResult.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\CommonHelper.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\MusicService.cs" />
+    <Compile Include="Music\Track\WebApi\AnyListen\XmMusic.cs" />
     <Compile Include="Music\Track\WebApi\YouTubeApi\DataClasses\ContentSearchResult.cs" />
     <Compile Include="Music\Track\WebApi\YouTubeApi\DataClasses\IVideoInfo.cs" />
     <Compile Include="Music\Track\WebApi\YouTubeApi\DataClasses\PlaylistInfo\PlaylistInfo.cs" />
@@ -541,6 +569,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\Languages\Hurricane.zh-cn.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Styles\AdvancedTimelineSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -823,6 +855,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="Hurricane_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -883,6 +916,7 @@
     <Resource Include="Resources\Languages\Icons\nl.png" />
     <Resource Include="Resources\App\bottom.png" />
     <Resource Include="Resources\Languages\Icons\ru.png" />
+    <Resource Include="Resources\Languages\Icons\cn.png" />
     <Content Include="youtube-dl.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -266,7 +266,8 @@ namespace Hurricane.MagicArrow
                     else
                     {
 
-                        Views.Test.TestWindow.AddMessage(string.Format("-> MAP: {0}; _movedOutSide: {1}; cursorX: {2}; MLX: {3}", "", _movedOutSide, cursorX, WpfScreen.MostLeftX));
+                        Views.Test.TestWindow.AddMessage(
+                            $"-> MAP: {""}; _movedOutSide: {_movedOutSide}; cursorX: {cursorX}; MLX: {WpfScreen.MostLeftX}");
                     }
                 }
             });

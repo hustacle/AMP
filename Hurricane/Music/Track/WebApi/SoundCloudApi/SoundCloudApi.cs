@@ -24,7 +24,7 @@ namespace Hurricane.Music.Track.WebApi.SoundCloudApi
                 if (config.SaveCoverLocal)
                 {
                     if (!albumDirectory.Exists) albumDirectory.Create();
-                    await ImageHelper.SaveImage(image, string.Format("{0}_{1}", track.SoundCloudID, GetQualityModifier(quality)), albumDirectory.FullName);
+                    await ImageHelper.SaveImage(image, $"{track.SoundCloudID}_{GetQualityModifier(quality)}", albumDirectory.FullName);
                 }
                 return image;
             }
@@ -53,7 +53,8 @@ namespace Hurricane.Music.Track.WebApi.SoundCloudApi
             {
                 try
                 {
-                    var result = JsonConvert.DeserializeObject<ApiResult>(await web.DownloadStringTaskAsync(string.Format("http://api.soundcloud.com/resolve.json?url={0}&client_id={1}", url, SensitiveInformation.SoundCloudKey)));
+                    var result = JsonConvert.DeserializeObject<ApiResult>(await web.DownloadStringTaskAsync(
+                        $"http://api.soundcloud.com/resolve.json?url={url}&client_id={SensitiveInformation.SoundCloudKey}"));
                     return new SoundCloudWebTrackResult
                     {
                         Duration = TimeSpan.FromMilliseconds(result.duration),
@@ -92,16 +93,14 @@ namespace Hurricane.Music.Track.WebApi.SoundCloudApi
             return new Tuple<bool, List<WebTrackResultBase>, IPlaylistResult>(false, null, null);
         }
 
-        public string ServiceName
-        {
-            get { return "SoundCloud"; }
-        }
+        public string ServiceName => "SoundCloud";
 
         async Task<List<WebTrackResultBase>> IMusicApi.Search(string searchText)
         {
             using (var web = new WebClient { Proxy = null })
             {
-                var results = JsonConvert.DeserializeObject<List<ApiResult>>(await web.DownloadStringTaskAsync(string.Format("https://api.soundcloud.com/tracks?q={0}&client_id={1}", searchText.ToEscapedUrl(), SensitiveInformation.SoundCloudKey)));
+                var results = JsonConvert.DeserializeObject<List<ApiResult>>(await web.DownloadStringTaskAsync(
+                    $"https://api.soundcloud.com/tracks?q={searchText.ToEscapedUrl()}&client_id={SensitiveInformation.SoundCloudKey}"));
                 return results.Where(x => x.IsStreamable).Select(x => new SoundCloudWebTrackResult
                 {
                     Duration = TimeSpan.FromMilliseconds(x.duration),
@@ -123,14 +122,8 @@ namespace Hurricane.Music.Track.WebApi.SoundCloudApi
             return ServiceName;
         }
 
-        public bool IsEnabled
-        {
-            get { return true; }
-        }
+        public bool IsEnabled => true;
 
-        public System.Windows.FrameworkElement ApiSettings
-        {
-            get { return null; }
-        }
+        public System.Windows.FrameworkElement ApiSettings => null;
     }
 }

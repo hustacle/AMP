@@ -37,7 +37,8 @@ namespace Hurricane.Settings.RegistryManager
             {
                 if (checkadmin)
                 {
-                    var info = new ProcessStartInfo(Assembly.GetEntryAssembly().Location, string.Format("/registry \"{0}\"", this.Extension))
+                    var info = new ProcessStartInfo(Assembly.GetEntryAssembly().Location,
+                        $"/registry \"{this.Extension}\"")
                     {
                         Verb = "runas" // indicates to elevate privileges
                     };

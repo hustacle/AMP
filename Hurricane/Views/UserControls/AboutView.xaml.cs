@@ -180,7 +180,7 @@ namespace Hurricane.Views.UserControls
             };
 
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            CurrentVersion = string.Format("{0}.{1}.{2} (Build {3})", version.Major, version.Minor, version.Build, version.Revision);
+            CurrentVersion = $"{version.Major}.{version.Minor}.{version.Build} (Build {version.Revision})";
             InitializeComponent();
         }
 

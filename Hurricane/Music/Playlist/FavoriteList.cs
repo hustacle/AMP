@@ -45,9 +45,6 @@ namespace Hurricane.Music.Playlist
            }
        }
 
-       public override bool CanEdit
-       {
-           get { return false; }
-       }
+       public override bool CanEdit => false;
     }
 }

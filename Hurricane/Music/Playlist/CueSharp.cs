@@ -84,10 +84,7 @@ namespace CueSharp
         /// <summary>
         /// Lines in the cue file that don't belong or have other general syntax errors.
         /// </summary>
-        public string[] Garbage
-        {
-            get { return m_Garbage; }
-        }
+        public string[] Garbage => m_Garbage;
 
         /// <summary>
         /// This command is used to specify the name of a perfomer for a CD-TEXT enhanced disc.
@@ -775,7 +772,7 @@ namespace CueSharp
                 ((lastTrackIndex(m_Tracks[0]).Minutes * 60) + lastTrackIndex(m_Tracks[0]).Seconds);
 
             ulong lDiscId = (((uint)n % 0xff) << 24 | (uint)t << 8 | (uint)m_Tracks.Length);
-            return String.Format("{0:x8}", lDiscId);
+            return $"{lDiscId:x8}";
         }
 
         private Index lastTrackIndex(Track track)

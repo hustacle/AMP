@@ -8,23 +8,10 @@ namespace Hurricane.Settings
 {
     static class SaveLocationManager
     {
-        static DirectoryInfo AppDataDirectory
-        {
-            get
-            {
-                return
-                    new DirectoryInfo(Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Hurricane"));
-            }
-        }
+        static DirectoryInfo AppDataDirectory => new DirectoryInfo(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Hurricane"));
 
-        private static FileInfo InstalledInfoFile
-        {
-            get
-            {
-                return new FileInfo(".IsInstalled");
-            }
-        }
+        private static FileInfo InstalledInfoFile => new FileInfo(".IsInstalled");
 
         private static bool? _isInstalled;
         public static bool IsInstalled()

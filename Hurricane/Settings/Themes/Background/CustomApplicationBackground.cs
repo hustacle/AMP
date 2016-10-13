@@ -40,21 +40,12 @@ namespace Hurricane.Settings.Themes.Background
             return Equals(other);
         }
 
-        public bool IsAnimated
-        {
-            get { return GeneralHelper.IsVideo(BackgroundPath); }
-        }
+        public bool IsAnimated => GeneralHelper.IsVideo(BackgroundPath);
 
-        public bool IsAvailable
-        {
-            get { return File.Exists(BackgroundPath); }
-        }
+        public bool IsAvailable => File.Exists(BackgroundPath);
 
 
-        public string DisplayText
-        {
-            get { return BackgroundPath; }
-        }
+        public string DisplayText => BackgroundPath;
     }
 
     public enum TextColor

@@ -35,22 +35,22 @@ namespace Hurricane.PluginAPI.AudioVisualisation
         /// <summary>
         /// The brush from <see cref="AccentColor"/>
         /// </summary>
-        public Brush AccentBrush { get { return _accentBrush ?? (_accentBrush = GetBrush(AccentColor)); } }
+        public Brush AccentBrush => _accentBrush ?? (_accentBrush = GetBrush(AccentColor));
 
         /// <summary>
         /// The brush from <see cref="WhiteColor"/>
         /// </summary>
-        public Brush WhiteBrush { get { return _whiteBrush ?? (_whiteBrush = GetBrush(WhiteColor)); } }
+        public Brush WhiteBrush => _whiteBrush ?? (_whiteBrush = GetBrush(WhiteColor));
 
         /// <summary>
         /// The brush from <see cref="BlackColor"/>
         /// </summary>
-        public Brush BlackBrush { get { return _blackBrush ?? (_blackBrush = GetBrush(BlackColor)); } }
+        public Brush BlackBrush => _blackBrush ?? (_blackBrush = GetBrush(BlackColor));
 
         /// <summary>
         /// The brush from <see cref="GrayColor"/>
         /// </summary>
-        public Brush GrayBrush { get { return _grayBrush ?? (_grayBrush = GetBrush(GrayColor)); } }
+        public Brush GrayBrush => _grayBrush ?? (_grayBrush = GetBrush(GrayColor));
 
         protected Brush GetBrush(Color color)
         {

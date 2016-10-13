@@ -35,7 +35,7 @@ namespace Hurricane.Settings
                     return;
                 }
             }
-            throw new ArgumentException(string.Format("The current code {0} isn't in the list", Code));
+            throw new ArgumentException($"The current code {Code} isn't in the list");
         }
 
         public LanguageInfo()

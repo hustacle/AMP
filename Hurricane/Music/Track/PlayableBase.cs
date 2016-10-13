@@ -24,6 +24,7 @@ namespace Hurricane.Music.Track
      XmlInclude(typeof (LocalTrackFragment)),
      XmlInclude(typeof (SoundCloudTrack)),
      XmlInclude(typeof (YouTubeTrack)),
+     XmlInclude(typeof(AnyListenTrack)),
      XmlInclude(typeof (CustomStream))]
     public abstract class PlayableBase : PropertyChangedBase, IEquatable<PlayableBase>, IRepresentable,
         IMusicInformation
@@ -121,23 +122,11 @@ namespace Hurricane.Music.Track
             set { SetProperty(value, ref _queueId); }
         }
 
-        public TimeSpan DurationTimespan
-        {
-            get
-            {
-                return TimeSpan.ParseExact(Duration, Duration.Split(':').Length == 2 ? @"mm\:ss" : @"hh\:mm\:ss", null);
-            }
-        }
+        public TimeSpan DurationTimespan => TimeSpan.ParseExact(Duration, Duration.Split(':').Length == 2 ? @"mm\:ss" : @"hh\:mm\:ss", null);
 
-        public string DisplayText
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(Artist) && HurricaneSettings.Instance.Config.ShowArtistAndTitle
-                    ? string.Format("{0} - {1}", Artist, Title)
-                    : Title;
-            }
-        }
+        public string DisplayText => !string.IsNullOrEmpty(Artist) && HurricaneSettings.Instance.Config.ShowArtistAndTitle
+            ? $"{Artist} - {Title}"
+            : Title;
 
         public abstract bool TrackExists { get; }
         public abstract TrackType TrackType { get; }
@@ -158,6 +147,7 @@ namespace Hurricane.Music.Track
 
         public abstract bool Equals(PlayableBase other);
         public string Album { get; set; }
+        public SongResult WebTrack { get; set; }
         public uint Year { get; set; }
         public List<Genre> Genres { get; set; }
 
@@ -229,7 +219,7 @@ namespace Hurricane.Music.Track
 
         public async void Load()
         {
-            if (_disposeImageCancellationToken != null) _disposeImageCancellationToken.Cancel();
+            _disposeImageCancellationToken?.Cancel();
             if (Image == null)
             {
                 IsLoadingImage = true;
@@ -249,14 +239,15 @@ namespace Hurricane.Music.Track
                 _disposeImageCancellationToken = new CancellationTokenSource();
                 try
                 {
-                    await Task.Delay(2000, _disposeImageCancellationToken.Token); //Some animations need that
+                    //await Task.Delay(2000, _disposeImageCancellationToken.Token); //Some animations need that
+                    await Task.Delay(1000, _disposeImageCancellationToken.Token); //Some animations need that
                 }
                 catch (TaskCanceledException)
                 {
                     return;
                 }
 
-                if (Image.StreamSource != null) Image.StreamSource.Dispose();
+                Image.StreamSource?.Dispose();
                 Image = null;
             }
         }
@@ -274,7 +265,7 @@ namespace Hurricane.Music.Track
         protected virtual void OnImageLoadComplete()
         {
             var handler = ImageLoadedComplete;
-            if (handler != null) handler(this, EventArgs.Empty);
+            handler?.Invoke(this, EventArgs.Empty);
         }
 
         protected void SetDuration(TimeSpan timeSpan)
