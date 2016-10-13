@@ -331,10 +331,7 @@ namespace Hurricane.Music.Track.WebApi
                 new AnyListen.TtMusic(),
                 new AnyListen.KgMusic(),
                 new AnyListen.KwMusic()
-                //new SoundCloudApi.SoundCloudApi(),
-                //new VkontakteApi.VkontakteApi(),
-                //new YouTubeApi.YouTubeApi()
-            }; //new GroovesharkApi.GroovesharkApi()
+            }; 
         }
     }
 }

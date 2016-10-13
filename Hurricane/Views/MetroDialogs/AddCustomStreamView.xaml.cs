@@ -83,17 +83,24 @@ namespace Hurricane.Views.MetroDialogs
         private async void Check_OnClick(object sender, RoutedEventArgs e)
         {
             IsChecking = true;
-            CurrentTrack = new CustomStream { StreamUrl = StreamUrl };
-            if (await CurrentTrack.CheckTrack())
+            if (StreamUrl.ToLower().Contains(".mp3") || StreamUrl.ToLower().Contains(".wma") || StreamUrl.ToLower().Contains(".flac") || StreamUrl.ToLower().Contains(".wav"))
             {
-                CanAddTrack = true;
+                CurrentTrack = new CustomStream { StreamUrl = StreamUrl };
+                if (await CurrentTrack.CheckTrack())
+                {
+                    CanAddTrack = true;
+                }
+                else
+                {
+                    System.Media.SystemSounds.Hand.Play();
+                    CanAddTrack = false;
+                }
             }
             else
             {
                 System.Media.SystemSounds.Hand.Play();
                 CanAddTrack = false;
             }
-
             IsChecking = false;
         }
 
@@ -117,7 +124,7 @@ namespace Hurricane.Views.MetroDialogs
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

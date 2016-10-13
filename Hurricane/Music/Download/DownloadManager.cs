@@ -85,12 +85,6 @@ namespace Hurricane.Music.Download
             {
                 switch (download.DownloadMethod)
                 {
-                    case DownloadMethod.SoundCloud:
-                        await SoundCloudDownloader.DownloadSoundCloudTrack(download.DownloadParameter, fileName, progressChangedAction);
-                        break;
-                    case DownloadMethod.youtube_dl:
-                        await youtube_dl.Instance.Download(download.DownloadParameter, fileName, progressChangedAction);
-                        break;
                     case DownloadMethod.AnyListen:
                         await AnyListenDownloader.DownloadAnyListenTrack(download.DownloadParameter, fileName, progressChangedAction);
                         break;
@@ -109,10 +103,6 @@ namespace Hurricane.Music.Download
         {
             switch (track.DownloadMethod)
             {
-                case DownloadMethod.SoundCloud:
-                    return ".mp3";
-                case DownloadMethod.youtube_dl:
-                    return ".m4a";
                 case DownloadMethod.AnyListen:
                     return CommonHelper.GetFormat(track.DownloadParameter);
                 default:

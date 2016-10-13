@@ -46,5 +46,5 @@ namespace Hurricane.Music.Download
         public bool CanDownload => true;
     }
 
-    public enum DownloadMethod { SoundCloud, youtube_dl, AnyListen }
+    public enum DownloadMethod { AnyListen }
 }

@@ -106,5 +106,5 @@ namespace Hurricane.Music.Track.WebApi
         public event EventHandler ImageLoadedComplete;
     }
 
-    public enum ProviderName { SoundCloud, YouTube, Grooveshark, Vkontakte, AnyListen }
+    public enum ProviderName { Grooveshark, Vkontakte, AnyListen }
 }
