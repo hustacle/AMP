@@ -54,7 +54,7 @@ namespace AnyListen.Music.AudioEngine
         private ISoundOut _soundOut;
         private float _volume = 1.0f;
 
-        private DispatcherTimer _progressHandle = new DispatcherTimer
+        private readonly DispatcherTimer _progressHandle = new DispatcherTimer
         {
             Interval = new TimeSpan(0, 0, 0, 0, 250)
         };
@@ -80,7 +80,7 @@ namespace AnyListen.Music.AudioEngine
                 return;
             }
             var crtTime = CurrentTrackPosition.TotalSeconds;
-            for (int i = 0; i < MyLrcItemList.Count; i++)
+            for (var i = 0; i < MyLrcItemList.Count; i++)
             {
                 if (i != MyLrcItemList.Count - 1)
                 {
@@ -290,6 +290,7 @@ namespace AnyListen.Music.AudioEngine
         protected void OnTrackChanged()
         {
             var lrcUrl = CurrentTrack.WebTrack?.LrcUrl;
+            var tempLrcList = new ObservableCollection<MyLrcItem>();
             if (!string.IsNullOrEmpty(lrcUrl))
             {
                 Task.Factory.StartNew((() =>
@@ -304,15 +305,15 @@ namespace AnyListen.Music.AudioEngine
                         return;
                     }
                     var lrc = new Lyric(html);
-                    MyLrcItemList = new ObservableCollection<MyLrcItem>();
                     for (int index = 0; index < lrc.LyricTextLine.Length; index++)
                     {
-                        MyLrcItemList.Add(new MyLrcItem
+                        tempLrcList.Add(new MyLrcItem
                         {
                             Time = lrc.LyricTimeLine[index],
                             LrcContent = lrc.LyricTextLine[index]
                         });
                     }
+                    MyLrcItemList = tempLrcList;
                     CurrentLrcIndex = 0;
                 }));
             }
@@ -361,12 +362,13 @@ namespace AnyListen.Music.AudioEngine
                     var lrc = new Lyric(lrcHtml);
                     for (var index = 0; index < lrc.LyricTextLine.Length; index++)
                     {
-                        MyLrcItemList.Add(new MyLrcItem
+                        tempLrcList.Add(new MyLrcItem
                         {
                             Time = lrc.LyricTimeLine[index],
                             LrcContent = lrc.LyricTextLine[index]
                         });
                     }
+                    MyLrcItemList = tempLrcList;
                     CurrentLrcIndex = 0;
                 }));
             }
