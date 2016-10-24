@@ -251,7 +251,7 @@
     <system:String x:Key="Download">下载</system:String>
     <system:String x:Key="Views">访问量</system:String>
     <system:String x:Key="NothingFound">未找到相关歌曲，请更换关键词重新搜索</system:String>
-    <system:String x:Key="NoTracksFound">No tracks found</system:String>
+    <system:String x:Key="NoTracksFound">空空如也</system:String>
     <system:String x:Key="AddToPlaylist">添加到播放列表</system:String>
     <system:String x:Key="Downloads">下载</system:String>
     <system:String x:Key="Platform">所属平台</system:String>

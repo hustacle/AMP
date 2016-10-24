@@ -297,9 +297,11 @@ namespace AnyListen.Music
                     return;
                 }
             }
-
-            if (await CSCoreEngine.OpenTrack(nextTrack))
-                CSCoreEngine.TogglePlayPause();
+            if (nextTrack.TrackExists)
+            {
+                if (await CSCoreEngine.OpenTrack(nextTrack))
+                    CSCoreEngine.TogglePlayPause();
+            }
         }
 
         private bool CheckIfTracksExists(IPlaylist list)

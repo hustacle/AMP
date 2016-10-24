@@ -1,7 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,7 +13,7 @@ using AnyListen.Music.Playlist;
 using AnyListen.Music.Track.WebApi.AnyListen;
 using AnyListen.Settings;
 using AnyListen.ViewModelBase;
-using AnyListen.Views;
+using AnyListen.ViewModels;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace AnyListen.Music.Track.WebApi
@@ -25,7 +25,6 @@ namespace AnyListen.Music.Track.WebApi
 
         private readonly AutoResetEvent _cancelWaiter;
         private bool _isSearching; //Difference between _IsRunning and IsSearching: _IsRunning is also true if pictures are downloading
-        private bool _canceled;
 
         private bool _isLoading;
         public bool IsLoading
@@ -57,8 +56,8 @@ namespace AnyListen.Music.Track.WebApi
             }
         }
 
-        private List<WebTrackResultBase> _selectedTrackList;
-        public List<WebTrackResultBase> SelectedTrackList
+        private IList _selectedTrackList;
+        public IList SelectedTrackList
         {
             get { return _selectedTrackList; }
             set
@@ -90,8 +89,6 @@ namespace AnyListen.Music.Track.WebApi
                     IsLoading = true;
                     if (_isSearching)
                     {
-                        //_canceled = true;
-                        //await Task.Run(() => _cancelWaiter.WaitOne());
                         return;
                     }
 
@@ -106,12 +103,6 @@ namespace AnyListen.Music.Track.WebApi
                         MessageBox.Show(ex.Message);
                     }
                     IsLoading = false;
-
-                    //foreach (var track in Results)
-                    //{
-                    //    await track.DownloadImage();
-                    //    if (CheckForCanceled()) return;
-                    //}
                     _isSearching = false;
                 }));
             }
@@ -225,13 +216,19 @@ namespace AnyListen.Music.Track.WebApi
                         _manager.RegisterPlaylist(newPlaylist);
                         playlist = newPlaylist;
                     }
-
-                    var track = SelectedTrack.ToPlayable();
-                    playlist.AddTrack(track);
-
-
+                    PlayableBase track = new AnyListenTrack();
+                    foreach (var webTrack in SelectedTrackList)
+                    {
+                        var selectTrack = webTrack as WebTrackResultBase;
+                        if (selectTrack == null)
+                        {
+                            continue;
+                        }
+                        track = selectTrack.ToPlayable();
+                        playlist.AddTrack(track);
+                    }
                     IsLoading = false;
-                    ViewModels.MainViewModel.Instance.MainTabControlIndex = 0;
+                    MainViewModel.Instance.MainTabControlIndex = 0;
                     _manager.SelectedPlaylist = playlist;
                     _manager.SelectedTrack = track;
                     _manager.SaveToSettings();
@@ -306,14 +303,41 @@ namespace AnyListen.Music.Track.WebApi
             {
                 return _downloadTrack ?? (_downloadTrack = new RelayCommand(parameter =>
                 {
-                    var track = SelectedTrack;
-                    if (track == null) return;
-                    var downloadDialog = new DownloadTrackWindow(track.DownloadFilename, DownloadManager.GetExtension(track)) { Owner = _baseWindow };
-                    if (downloadDialog.ShowDialog() == true)
+                    var selectList = parameter as IList;
+                    if (selectList == null) return;
+                    foreach (var webTrack in selectList)
                     {
-                        _manager.DownloadManager.AddEntry(track, downloadDialog.DownloadSettings.Clone(), downloadDialog.SelectedPath);
-                        _manager.DownloadManager.IsOpen = true;
+                        var track = webTrack as WebTrackResultBase;
+                        if (track == null)
+                        {
+                            continue;
+                        }
+                        var fileName = Path.Combine(AnyListenSettings.Instance.Config.DownloadSettings.DownloadFolder,
+                            track.DownloadFilename + DownloadManager.GetExtension(track));
+                        _manager.DownloadManager.AddEntry(track, new DownloadSettings
+                        {
+                            AddTags = true,
+                            IsConverterEnabled = false,
+                            Bitrate = AudioBitrate.B320,
+                            DownloadFolder = AnyListenSettings.Instance.Config.DownloadSettings.DownloadFolder
+                        }, fileName);
                     }
+                    _manager.DownloadManager.IsOpen = true;
+                }));
+            }
+        }
+
+
+        private RelayCommand _selectionChangeCommand;
+        public RelayCommand SelectionChangeCommand
+        {
+            get
+            {
+                return _selectionChangeCommand ?? (_selectionChangeCommand = new RelayCommand(parameter =>
+                {
+                    var selectList = parameter as IList;
+                    if (selectList == null) return;
+                    SelectedTrackList = selectList;
                 }));
             }
         }
@@ -361,7 +385,7 @@ namespace AnyListen.Music.Track.WebApi
 
                     if (await AddTracksToPlaylist(playlist, PlaylistResult))
                     {
-                        ViewModels.MainViewModel.Instance.MainTabControlIndex = 0;
+                        MainViewModel.Instance.MainTabControlIndex = 0;
                         _manager.SelectedPlaylist = playlist;
                     }
                 }));
@@ -380,7 +404,7 @@ namespace AnyListen.Music.Track.WebApi
                     if (playlist == null) return;
                     if (await AddTracksToPlaylist(playlist, PlaylistResult))
                     {
-                        ViewModels.MainViewModel.Instance.MainTabControlIndex = 0;
+                        MainViewModel.Instance.MainTabControlIndex = 0;
                         _manager.SelectedPlaylist = playlist;
                     }
                 }));
@@ -415,17 +439,65 @@ namespace AnyListen.Music.Track.WebApi
             return true;
         }
 
-        //private bool CheckForCanceled()
-        //{
-        //    if (_canceled)
-        //    {
-        //        _cancelWaiter.Set();
-        //        _canceled = false;
-        //        _isSearching = false;
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        private RelayCommand _copyUrl;
+        public RelayCommand CopyUrl
+        {
+            get
+            {
+                return _copyUrl ?? (_copyUrl = new RelayCommand(parameter =>
+                {
+                    if (SelectedTrack?.WebTrack == null)
+                    {
+                        return;
+                    }
+                    var model = Convert.ToInt32(parameter);
+                    string link;
+                    switch (model)
+                    {
+                        case 0:
+                            link = SelectedTrack.WebTrack.CopyUrl;
+                            break;
+                        case 1:
+                            link = SelectedTrack.WebTrack.ArtistName + " - "+ SelectedTrack.WebTrack.SongName;
+                            break;
+                        case 2:
+                            link = SelectedTrack.WebTrack.FlacUrl;
+                            break;
+                        case 3:
+                            link = SelectedTrack.WebTrack.ApeUrl;
+                            break;
+                        case 4:
+                            link = SelectedTrack.WebTrack.WavUrl;
+                            break;
+                        case 5:
+                            link = SelectedTrack.WebTrack.SqUrl;
+                            break;
+                        case 6:
+                            link = SelectedTrack.WebTrack.HqUrl;
+                            break;
+                        case 7:
+                            link = SelectedTrack.WebTrack.LqUrl;
+                            break;
+                        case 8:
+                            link = SelectedTrack.WebTrack.LrcUrl;
+                            break;
+                        case 9:
+                            link = SelectedTrack.WebTrack.PicUrl;
+                            break;
+                        case 10:
+                            link = SelectedTrack.WebTrack.MvHdUrl;
+                            break;
+                        case 11:
+                            link = SelectedTrack.WebTrack.MvLdUrl;
+                            break;
+                        default:
+                            link = SelectedTrack.WebTrack.CopyUrl;
+                            break;
+                    }
+                    Clipboard.SetText(link);
+                }));
+            }
+        }
 
         private void SortResults(IEnumerable<WebTrackResultBase> list)
         {

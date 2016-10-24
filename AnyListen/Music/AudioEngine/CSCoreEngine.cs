@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -274,9 +275,9 @@ namespace AnyListen.Music.AudioEngine
             }
         }
 
-        private List<MyLrcItem> _myLrcItemList;
+        private ObservableCollection<MyLrcItem> _myLrcItemList;
 
-        public List<MyLrcItem> MyLrcItemList
+        public ObservableCollection<MyLrcItem> MyLrcItemList
         {
             get { return _myLrcItemList; }
             set
@@ -303,7 +304,7 @@ namespace AnyListen.Music.AudioEngine
                         return;
                     }
                     var lrc = new Lyric(html);
-                    MyLrcItemList = new List<MyLrcItem>();
+                    MyLrcItemList = new ObservableCollection<MyLrcItem>();
                     for (int index = 0; index < lrc.LyricTextLine.Length; index++)
                     {
                         MyLrcItemList.Add(new MyLrcItem
@@ -319,19 +320,45 @@ namespace AnyListen.Music.AudioEngine
             {
                 Task.Factory.StartNew((() =>
                 {
-                    var length = Convert.ToInt32(CurrentTrack.DurationTimespan.TotalMilliseconds);
-                    var artist = CurrentTrack.Artist;
-                    var songName = CurrentTrack.Title;
-                    var html = CommonHelper.GetLrc(songName, artist, length);
-                    html = HttpUtility.HtmlDecode(html);
-                    html = HttpUtility.HtmlDecode(html);
-                    if (string.IsNullOrEmpty(html))
+                    var lrcHtml = "";
+                    var localTrack = CurrentTrack as LocalTrack;
+                    if (localTrack != null)
+                    {
+                        var filePath = localTrack.TrackInformation;
+                        if (filePath.Exists)
+                        {
+                            using (var file = TagLib.File.Create(filePath.FullName))
+                            {
+                                lrcHtml = file.Tag.Lyrics;
+                                if (string.IsNullOrEmpty(lrcHtml))
+                                {
+                                    var lrcPath =
+                                        localTrack.Path.Substring(0, localTrack.Path.LastIndexOf('.')).TrimEnd('.') +
+                                        ".lrc";
+                                    if (File.Exists(lrcPath))
+                                    {
+                                        lrcHtml = File.ReadAllText(lrcPath);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (string.IsNullOrEmpty(lrcHtml))
+                    {
+                        var length = Convert.ToInt32(CurrentTrack.DurationTimespan.TotalMilliseconds);
+                        var artist = CurrentTrack.Artist;
+                        var songName = CurrentTrack.Title;
+                        lrcHtml = CommonHelper.GetLrc(songName, artist, length);
+                    }
+                    if (string.IsNullOrEmpty(lrcHtml))
                     {
                         MyLrcItemList = null;
                         CurrentLrcIndex = 0;
                         return;
                     }
-                    var lrc = new Lyric(html);
+                    lrcHtml = HttpUtility.HtmlDecode(lrcHtml);
+                    lrcHtml = HttpUtility.HtmlDecode(lrcHtml);
+                    var lrc = new Lyric(lrcHtml);
                     for (var index = 0; index < lrc.LyricTextLine.Length; index++)
                     {
                         MyLrcItemList.Add(new MyLrcItem

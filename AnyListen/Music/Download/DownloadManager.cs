@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml.Serialization;
 using AnyListen.Music.Track;
 using AnyListen.Music.Track.WebApi.AnyListen;
@@ -299,6 +300,8 @@ namespace AnyListen.Music.Download
                                 var html = await new WebClient { Encoding = Encoding.UTF8 }.DownloadStringTaskAsync(new Uri(songResult.LrcUrl));
                                 if (!string.IsNullOrEmpty(html))
                                 {
+                                    html = HttpUtility.HtmlDecode(html);
+                                    html = HttpUtility.HtmlDecode(html);
                                     tags.Lyrics = html;
                                 }
                             }
