@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
+using System.Windows.Threading;
 using CSCore;
 using CSCore.SoundOut;
 using CSCore.Streams;
 using CSCore.Streams.Effects;
 using AnyListen.Music.CustomEventArgs;
+using AnyListen.Music.Lrc;
 using AnyListen.Music.MusicEqualizer;
 using AnyListen.Music.Track;
+using AnyListen.Music.Track.WebApi.AnyListen;
 using AnyListen.Music.Visualization;
 using AnyListen.PluginAPI.AudioVisualisation;
 using AnyListen.Settings;
@@ -48,6 +53,11 @@ namespace AnyListen.Music.AudioEngine
         private ISoundOut _soundOut;
         private float _volume = 1.0f;
 
+        private DispatcherTimer _progressHandle = new DispatcherTimer
+        {
+            Interval = new TimeSpan(0, 0, 0, 0, 250)
+        };
+
         public CSCoreEngine()
         {
             _fader = new VolumeFading();
@@ -57,9 +67,34 @@ namespace AnyListen.Music.AudioEngine
             SoundOutManager.Enable += (sender, args) => IsEnabled = true;
             SoundOutManager.Disable += (sender, args) => IsEnabled = false;
             SoundOutManager.Activate();
-
+            _progressHandle.Tick += _progressHandle_Tick;
             if (IsEnabled)
                 RefreshSoundOut();
+        }
+
+        private void _progressHandle_Tick(object sender, EventArgs e)
+        {
+            if (MyLrcItemList == null)
+            {
+                return;
+            }
+            var crtTime = CurrentTrackPosition.TotalSeconds;
+            for (int i = 0; i < MyLrcItemList.Count; i++)
+            {
+                if (i != MyLrcItemList.Count - 1)
+                {
+                    if (!(crtTime >= MyLrcItemList[i].Time) || !(crtTime < MyLrcItemList[i + 1].Time))
+                    {
+                        continue;
+                    }
+                    if (CurrentLrcIndex != i)
+                    {
+                        CurrentLrcIndex = i;
+                    }
+                    break;
+                }
+                CurrentLrcIndex = MyLrcItemList.Count - 1;
+            }
         }
 
         public void Dispose()
@@ -106,9 +141,9 @@ namespace AnyListen.Music.AudioEngine
             {
                 if (SetProperty(value, ref _volume))
                 {
-                    if (_soundOut != null && _soundOut.WaveSource != null)
+                    if (_soundOut?.WaveSource != null)
                         _soundOut.Volume = value;
-                    if (VolumeChanged != null) VolumeChanged(this, EventArgs.Empty);
+                    VolumeChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -173,7 +208,7 @@ namespace AnyListen.Music.AudioEngine
             {
                 try
                 {
-                    return SoundSource != null ? SoundSource.GetLength() : TimeSpan.Zero;
+                    return SoundSource?.GetLength() ?? TimeSpan.Zero;
                 }
                 catch (Exception)
                 {
@@ -215,8 +250,99 @@ namespace AnyListen.Music.AudioEngine
             TrackFinished?.Invoke(this, EventArgs.Empty);
         }
 
+        private string _currentLrcText;
+
+        public string CurrentLrcText
+        {
+            get { return _currentLrcText; }
+            set
+            {
+                _currentLrcText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _currentLrcIndex;
+
+        public int CurrentLrcIndex
+        {
+            get { return _currentLrcIndex; }
+            set
+            {
+                _currentLrcIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private List<MyLrcItem> _myLrcItemList;
+
+        public List<MyLrcItem> MyLrcItemList
+        {
+            get { return _myLrcItemList; }
+            set
+            {
+                _myLrcItemList = value;
+                OnPropertyChanged();
+            }
+        }
+
         protected void OnTrackChanged()
         {
+            var lrcUrl = CurrentTrack.WebTrack?.LrcUrl;
+            if (!string.IsNullOrEmpty(lrcUrl))
+            {
+                Task.Factory.StartNew((() =>
+                {
+                    var html = CommonHelper.GetHtmlContent(lrcUrl);
+                    html = HttpUtility.HtmlDecode(html);
+                    html = HttpUtility.HtmlDecode(html);
+                    if (string.IsNullOrEmpty(html))
+                    {
+                        MyLrcItemList = null;
+                        CurrentLrcIndex = 0;
+                        return;
+                    }
+                    var lrc = new Lyric(html);
+                    MyLrcItemList = new List<MyLrcItem>();
+                    for (int index = 0; index < lrc.LyricTextLine.Length; index++)
+                    {
+                        MyLrcItemList.Add(new MyLrcItem
+                        {
+                            Time = lrc.LyricTimeLine[index],
+                            LrcContent = lrc.LyricTextLine[index]
+                        });
+                    }
+                    CurrentLrcIndex = 0;
+                }));
+            }
+            else
+            {
+                Task.Factory.StartNew((() =>
+                {
+                    var length = Convert.ToInt32(CurrentTrack.DurationTimespan.TotalMilliseconds);
+                    var artist = CurrentTrack.Artist;
+                    var songName = CurrentTrack.Title;
+                    var html = CommonHelper.GetLrc(songName, artist, length);
+                    html = HttpUtility.HtmlDecode(html);
+                    html = HttpUtility.HtmlDecode(html);
+                    if (string.IsNullOrEmpty(html))
+                    {
+                        MyLrcItemList = null;
+                        CurrentLrcIndex = 0;
+                        return;
+                    }
+                    var lrc = new Lyric(html);
+                    for (var index = 0; index < lrc.LyricTextLine.Length; index++)
+                    {
+                        MyLrcItemList.Add(new MyLrcItem
+                        {
+                            Time = lrc.LyricTimeLine[index],
+                            LrcContent = lrc.LyricTextLine[index]
+                        });
+                    }
+                    CurrentLrcIndex = 0;
+                }));
+            }
             TrackChanged?.Invoke(this, new TrackChangedEventArgs(CurrentTrack));
         }
 
@@ -236,9 +362,7 @@ namespace AnyListen.Music.AudioEngine
                 return;
             }
 
-            PositionChanged?.Invoke(this,
-    new PositionChangedEventArgs((int)CurrentTrackPosition.TotalSeconds,
-        (int)CurrentTrackLength.TotalSeconds));
+            PositionChanged?.Invoke(this, new PositionChangedEventArgs((int)CurrentTrackPosition.TotalSeconds, (int)CurrentTrackLength.TotalSeconds));
         }
 
         private void value_EqualizerChanged(object sender, EqualizerChangedEventArgs e)
@@ -466,6 +590,14 @@ namespace AnyListen.Music.AudioEngine
 
         protected void CurrentStateChanged()
         {
+            if (IsPlaying)
+            {
+                _progressHandle.Start();
+            }
+            else
+            {
+                _progressHandle.Stop();
+            }
             OnPropertyChanged("IsPlaying");
             OnPropertyChanged("CurrentState");
             PlayStateChanged?.Invoke(this, EventArgs.Empty);
@@ -474,8 +606,7 @@ namespace AnyListen.Music.AudioEngine
 
         private void notificationSource_SingleBlockRead(object sender, SingleBlockReadEventArgs e)
         {
-            if (_analyser != null)
-                _analyser.Add(e.Left, e.Right);
+            _analyser?.Add(e.Left, e.Right);
         }
 
         private void notifysource_BlockRead(object sender, EventArgs e)

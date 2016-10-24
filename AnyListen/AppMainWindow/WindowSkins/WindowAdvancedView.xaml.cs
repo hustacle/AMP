@@ -20,8 +20,8 @@ namespace AnyListen.AppMainWindow.WindowSkins
             {
                 MaxHeight = double.PositiveInfinity,
                 MaxWidth = double.PositiveInfinity,
-                MinHeight = 600,
-                MinWidth = 850,
+                MinHeight = 650,
+                MinWidth = 1080,
                 ShowSystemMenuOnRightClick = true,
                 ShowTitleBar = false,
                 ShowWindowControls = true,
@@ -51,13 +51,13 @@ namespace AnyListen.AppMainWindow.WindowSkins
         public void EnableWindow()
         {
             var visulisation = AudioVisualisationContentControl.Tag as IAudioVisualisation;
-            if (visulisation != null) visulisation.Enable();
+            visulisation?.Enable();
         }
 
         public void DisableWindow()
         {
             var visulisation = AudioVisualisationContentControl.Tag as IAudioVisualisation;
-            if (visulisation != null) visulisation.Disable();
+            visulisation?.Disable();
         }
 
         public WindowSkinConfiguration Configuration { get; set; }
@@ -112,6 +112,41 @@ namespace AnyListen.AppMainWindow.WindowSkins
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             MainViewModel.Instance.MusicManager.Commands.PlaySelectedTrack.Execute(null);
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (fullLyricList.Items.Count <= 0)
+                {
+                    return;
+                }
+                var displayLine = Convert.ToInt32(fullLyricList.ActualHeight / 48);
+                int index;
+                if (fullLyricList.SelectedIndex > displayLine && fullLyricList.SelectedIndex < (fullLyricList.Items.Count - displayLine))
+                {
+                    index = fullLyricList.SelectedIndex + displayLine;
+                }
+                else if (fullLyricList.SelectedIndex >= fullLyricList.Items.Count - displayLine)
+                {
+                    index = fullLyricList.Items.Count - 1;
+                }
+                else if (fullLyricList.SelectedIndex <= displayLine)
+                {
+                    index = 0;
+                }
+                else
+                {
+                    index = fullLyricList.Items.Count / 2 + 1;
+                }
+                var item = fullLyricList.Items.GetItemAt(index);
+                fullLyricList.ScrollIntoView(item ?? fullLyricList.SelectedItem);
+            }
+            catch (Exception)
+            {
+                //
+            }
         }
     }
 }

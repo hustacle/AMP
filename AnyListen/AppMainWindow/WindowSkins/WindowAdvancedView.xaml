@@ -13,6 +13,7 @@
              xmlns:userControls="clr-namespace:AnyListen.Views.UserControls"
              xmlns:viewmodels="clr-namespace:AnyListen.ViewModels"
              xmlns:web="clr-namespace:AnyListen.Music.Track.WebApi"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              DataContext="{x:Static viewmodels:MainViewModel.Instance}"
              d:DesignHeight="500"
              d:DesignWidth="1000"
@@ -851,70 +852,29 @@
             </TabItem>
             <TabItem Header="{DynamicResource NowPlaying}">
                 <Grid>
-                    <Grid HorizontalAlignment="Center"
+                    <Grid Margin="100,30,50,30"
                           VerticalAlignment="Center"
-                          Visibility="{Binding MusicManager.CSCoreEngine.CurrentTrack,
-                                               Converter={StaticResource CollapsedOnNullValue}}">
+                          Visibility="{Binding MusicManager.CSCoreEngine.CurrentTrack, Converter={StaticResource CollapsedOnNullValue}}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" MinWidth="350"/>
                             <ColumnDefinition Width="50" />
-                            <ColumnDefinition Width="500" />
+                            <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <hurricaneControls:TrackImagePreseter Width="280"
-                                                              Height="280"
-                                                              Grid.Column="0"
-                                                              Grid.Row="0"
-                                                              Track="{Binding MusicManager.CSCoreEngine.CurrentTrack}" />
-                        <Grid Grid.Row="0" Grid.Column="2" Margin="0,25,0,0">
+
+                        <Grid HorizontalAlignment="Right">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <hurricaneControls:AnimatedStackPanel AnimationInterval="300"
-                                                                  Orientation="Vertical"
-                                                                  UpdateObject="{Binding MusicManager.CSCoreEngine.CurrentTrack}">
-                                <TextBlock FontSize="14"
-                                           Foreground="{StaticResource NormalColorBrush}"
-                                           Text="{Binding MusicManager.CSCoreEngine.CurrentTrack.Artist}" />
-                                <TextBlock Margin="0,5,0,0"
-                                           FontFamily="Segoe UI Light"
-                                           FontSize="32"
-                                           Text="{Binding MusicManager.CSCoreEngine.CurrentTrack.Title}"
-                                           TextWrapping="Wrap"
-                                           behaviors:TextBlockBehavior.PlaceHolderText="{DynamicResource NoArtist}" />
-                                <TextBlock Margin="0,5,0,0"
-                                           FontFamily="Segoe UI Light"
-                                           FontSize="18"
-                                           Foreground="DarkGray"
-                                           Text="{Binding MusicManager.CSCoreEngine.CurrentTrack.Album}">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <Trigger Property="Text" Value="">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                                <ToggleButton Width="18"
-                                              Height="18"
-                                              Margin="0,10,0,10"
-                                              HorizontalAlignment="Left"
-                                              Background="{StaticResource NormalColorBrush}"
-                                              Foreground="#FFB4B4B4"
-                                              IsChecked="{Binding MusicManager.CSCoreEngine.CurrentTrack.IsFavorite}"
-                                              Style="{StaticResource FavoriteToggleButton}" />
-                            </hurricaneControls:AnimatedStackPanel>
+                            <hurricaneControls:TrackImagePreseter Width="350" Height="350"
+                                                                  Track="{Binding MusicManager.CSCoreEngine.CurrentTrack}" />
                             <ContentControl x:Name="AudioVisualisationContentControl"
-                                            Grid.Row="1"
-                                            Height="100"
-                                            Margin="0,0,0,10"
-                                            VerticalAlignment="Bottom"
+                                            Height="60" Grid.Row="1"
+                                            VerticalAlignment="Top"
+                                            Margin="0,10,0,0"
                                             Focusable="False"
                                             behaviors:AudioVisualisationBehavior.AudioVisualisationForAdvancedWindow="{Binding MySettings.Config.ApplicationDesign.AudioVisualisation.Visualisation}">
                                 <ContentControl.Style>
@@ -944,9 +904,110 @@
                                 </ContentControl.Style>
                             </ContentControl>
                         </Grid>
-                        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Height="100">
-                            
-                        </StackPanel>
+                        <Grid Grid.Row="0" Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <hurricaneControls:AnimatedStackPanel AnimationInterval="300"
+                                                                  Orientation="Vertical"
+                                                                  UpdateObject="{Binding MusicManager.CSCoreEngine.CurrentTrack}">
+                                <TextBlock FontSize="16"
+                                           Margin="0,6,0,0"
+                                           Foreground="{StaticResource NormalColorBrush}"
+                                           Text="{Binding MusicManager.CSCoreEngine.CurrentTrack.Artist}" />
+                                <TextBlock Margin="0,5,0,0"
+                                           FontFamily="Segoe UI Light"
+                                           FontSize="28"
+                                           Text="{Binding MusicManager.CSCoreEngine.CurrentTrack.Title}"
+                                           TextWrapping="Wrap"
+                                           behaviors:TextBlockBehavior.PlaceHolderText="{DynamicResource NoArtist}" />
+                                <TextBlock Margin="0,5,0,0"
+                                           FontFamily="Segoe UI Light"
+                                           FontSize="20"
+                                           Foreground="DarkGray"
+                                           Text="{Binding MusicManager.CSCoreEngine.CurrentTrack.Album}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <ToggleButton Width="18"
+                                              Height="18"
+                                              Margin="0,10,10,10"
+                                              HorizontalAlignment="Left"
+                                              Background="{StaticResource NormalColorBrush}"
+                                              Foreground="#FFB4B4B4"
+                                              IsChecked="{Binding MusicManager.CSCoreEngine.CurrentTrack.IsFavorite}"
+                                              Style="{StaticResource FavoriteToggleButton}" />
+                            </hurricaneControls:AnimatedStackPanel>
+                            <ListBox Grid.Row="1" Margin="0,10,10,10"
+                                     ItemsSource="{Binding MusicManager.CSCoreEngine.MyLrcItemList}"
+                                     x:Name="fullLyricList"  SelectionMode="Single"
+                                     Focusable="False"
+                                     AllowDrop="False"
+                                     IsEnabled="True"
+                                     MinHeight="200"
+                                     SelectionChanged="Selector_OnSelectionChanged"
+                                     SelectedIndex="{Binding MusicManager.CSCoreEngine.CurrentLrcIndex}"
+                                     Visibility="{Binding MusicManager.CSCoreEngine.MyLrcItemList, Converter={StaticResource CollapsedOnNullValue}}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock FontSize="16" Margin="0,2,0,2" 
+                                                   IsEnabled="False" Text="{Binding Time}" 
+                                                       Visibility="Collapsed"
+                                                   TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                            <TextBlock FontSize="16" Margin="0,2,0,2" 
+                                                   IsEnabled="False" Text="{Binding LrcContent}" 
+                                                   TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <ContentPresenter/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True" >
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Foreground" Value="{StaticResource NormalColorBrush}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                            <TextBlock Grid.Row="1" HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Padding="0,60,10,10"
+                                       FontSize="16"
+                                       FontWeight="Light"
+                                       Text="该歌曲暂无歌词">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding MusicManager.CSCoreEngine.MyLrcItemList}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
                     </Grid>
                     <TextBlock HorizontalAlignment="Center"
                                VerticalAlignment="Center"

@@ -40,8 +40,7 @@ namespace AnyListen.GUI.Controls
         private CancellationTokenSource _cts;
         private async void SetTrack(IRepresentable newTrack)
         {
-            if (_cts != null)
-                _cts.Cancel();
+            _cts?.Cancel();
 
             _cts = new CancellationTokenSource();
             var token = _cts.Token;
@@ -67,7 +66,7 @@ namespace AnyListen.GUI.Controls
             if (!token.IsCancellationRequested)
             {
                 TrackToRepresent = newTrack;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TrackToRepresent"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackToRepresent"));
             }
         }
 

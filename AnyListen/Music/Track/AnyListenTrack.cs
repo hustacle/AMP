@@ -132,6 +132,9 @@ namespace AnyListen.Music.Track
             get
             {
                 var song = SongResult;
+                song.ArtistName = CommonHelper.RemoveSpicalChar(song.ArtistName);
+                song.AlbumName = CommonHelper.RemoveSpicalChar(song.AlbumName);
+                song.SongName = CommonHelper.RemoveSpicalChar(song.SongName);
                 var fileName = "";
                 switch (AnyListenSettings.Instance.Config.FileFloderFormat)
                 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 using CSCore.Codecs.FLAC;
 using AnyListen.Music.Download;
@@ -43,6 +44,9 @@ namespace AnyListen.Music.Track.WebApi.AnyListen
             get
             {
                 var song = (SongResult)Result;
+                song.ArtistName = CommonHelper.RemoveSpicalChar(song.ArtistName);
+                song.AlbumName = CommonHelper.RemoveSpicalChar(song.AlbumName);
+                song.SongName = CommonHelper.RemoveSpicalChar(song.SongName);
                 var fileName = "";
                 switch (AnyListenSettings.Instance.Config.FileFloderFormat)
                 {

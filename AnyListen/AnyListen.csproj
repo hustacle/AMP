@@ -238,6 +238,10 @@
     <Compile Include="Music\Download\DownloadSettings.cs" />
     <Compile Include="Music\Download\ffmpeg.cs" />
     <Compile Include="Music\Download\GroovesharkApi.cs" />
+    <Compile Include="Music\Lrc\LrcAnalyze.cs" />
+    <Compile Include="Music\Lrc\LrcLineItem.cs" />
+    <Compile Include="Music\Lrc\Lyric.cs" />
+    <Compile Include="Music\Lrc\MyLrcItem.cs" />
     <Compile Include="Music\Playlist\CueSharp.cs" />
     <Compile Include="Music\Playlist\ImportCueSheet.cs" />
     <Compile Include="Music\Playlist\ImportM3uPlaylist.cs" />
@@ -847,7 +851,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Hurricane_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

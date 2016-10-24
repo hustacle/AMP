@@ -3,7 +3,9 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 
 namespace AnyListen.Music.Track.WebApi.AnyListen
 {
@@ -14,6 +16,29 @@ namespace AnyListen.Music.Track.WebApi.AnyListen
             using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
             {
                 return  ndpKey != null && Convert.ToInt32(ndpKey.GetValue("Release")) >= 378389;
+            }
+        }
+
+        public static string GetHtmlContent(string url)
+        {
+            try
+            {
+                var uri = new Uri(url);
+                var myHttpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
+                myHttpWebRequest.Method = "GET";
+                myHttpWebRequest.Timeout = 5000;
+                myHttpWebRequest.Accept = @"text/html,application/xhtml+xml,application/xml;*/*";
+                myHttpWebRequest.UserAgent = @"Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)";
+                var response = (HttpWebResponse)myHttpWebRequest.GetResponse();
+                if (response.StatusCode != HttpStatusCode.OK) return null;
+                // ReSharper disable once AssignNullToNotNullAttribute
+                var responseReader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                var result = responseReader.ReadToEnd();
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -275,6 +300,45 @@ namespace AnyListen.Music.Track.WebApi.AnyListen
                 fs.Write(Encoding.Default.GetBytes(str), 0, Encoding.Default.GetBytes(str).Length);
                 fs.Close();
             }
+        }
+
+        public static string RemoveSpicalChar(string input)
+        {
+            return Regex.Replace(input, @"[?:*""<>|\/]", "");
+        }
+
+
+        public static string GetLrc(string name, string artist, int length)
+        {
+            var url = "http://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=" + artist + "-" +
+                          name + "&duration=" + length + "&hash=";
+            var html = GetHtmlContent(url);
+            if (string.IsNullOrEmpty(html))
+            {
+                return "";
+            }
+            var json = JObject.Parse(html);
+            if (json["status"].ToString() == "404")
+            {
+                return "";
+            }
+            var hash = json["candidates"].First["accesskey"].ToString();
+            var mid = json["candidates"].First["id"].ToString();
+            url =
+                "http://lyrics.kugou.com/download?ver=1&client=pc&id=" + mid + "&accesskey=" + hash + "&fmt=lrc&charset=utf8";
+            html = GetHtmlContent(url);
+            if (string.IsNullOrEmpty(html))
+            {
+                return "";
+            }
+            json = JObject.Parse(html);
+            var str = DecodeBase64(Encoding.UTF8, json["content"].ToString());
+            return str;
+        }
+
+        public static string DecodeBase64(Encoding encode, string result)
+        {
+            return encode.GetString(Convert.FromBase64String(result));
         }
     }
 }
