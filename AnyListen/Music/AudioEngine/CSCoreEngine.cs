@@ -290,6 +290,7 @@ namespace AnyListen.Music.AudioEngine
         protected void OnTrackChanged()
         {
             var lrcUrl = CurrentTrack.WebTrack?.LrcUrl;
+            MyLrcItemList = null;
             var tempLrcList = new ObservableCollection<MyLrcItem>();
             if (!string.IsNullOrEmpty(lrcUrl))
             {
@@ -300,7 +301,6 @@ namespace AnyListen.Music.AudioEngine
                     html = HttpUtility.HtmlDecode(html);
                     if (string.IsNullOrEmpty(html))
                     {
-                        MyLrcItemList = null;
                         CurrentLrcIndex = 0;
                         return;
                     }
@@ -353,7 +353,6 @@ namespace AnyListen.Music.AudioEngine
                     }
                     if (string.IsNullOrEmpty(lrcHtml))
                     {
-                        MyLrcItemList = null;
                         CurrentLrcIndex = 0;
                         return;
                     }

@@ -57,7 +57,7 @@ namespace AnyListen.Music.Playlist
                 return format.ImportTracks(basePath, reader);
         }
 
-        public static string[] RightExtension = {".mp3",".wma",".ape",".flac",".wav",".aac",".ogg", ".m3u", ".cue" };
+        public static string[] RightExtension = {".mp3",".wma",".flac",".wav",".aac", ".acc", ".ogg", ".m3u", ".cue" };
 
         // import all files:
         //   if some of them are playlists, read them and return tracks;

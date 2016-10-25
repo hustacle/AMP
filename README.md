@@ -1,20 +1,11 @@
-Hurricane
+AnyListen
 ==============
 
-Hurricane is a music player written in C# based on the [CSCore sound library](https://cscore.codeplex.com/).
+AnyListen is a music player written in C# based on the [CSCore sound library](https://cscore.codeplex.com/).
 
-![Overview](http://fs2.directupload.net/images/150220/vp9sem88.png)
+![Overview](http://yyfm.oss-cn-qingdao.aliyuncs.com/anylisten/anylisten-01.jpg)
 
-##Smart/Advanced view
-
-Hurricane provides two views: The smart view and the advanced view. The advanced view provides much information and is easy to use. The smart view is reduced to the essential functions. If you pin the window to the left or right side of your screen, it switches to the smart view and hides automatically if it loses focus. To bring it into the view again, move your cursor to the side where Hurricane has disappeared and an arrow will be shown: (Magic Arrow!)
-
-![Magic Arrow](http://www.vincentgri.de/hurricane/images/GitHub/magicArrow.png)
-
-If you click on it, Hurricane appears.
-
-
-##Why Hurricane?
+##Why AnyListen?
 
  - Modern design
  - Tag editor
@@ -29,26 +20,62 @@ If you click on it, Hurricane appears.
  - Supports playlist import (m3u and cue sheet)
  - Works well with games
  - Supports DirectSound and WASAPI
+ - Three ways to load lyric
  
- 
+##Change Log
+###2016.10.25 V1.0.4
+1.多选加入播放列表；
+2.多选进行下载；
+3.复制地址；
+4.歌曲外观调整；
+5.离线歌曲歌词支持；
+6.整体稳定性
+
+###2016.10.24 V1.0.3
+1.添加歌词
+
+###2016.10.22 V1.0.2
+主要提高软件稳定性：
+1.修正非歌曲文件导入造成软件异常退出的BUG；
+2.修正播放下架歌曲造成的异常退出；
+3.其他稳定性调整
+
+###2016.10.14 V1.0.1
+1.修复正在播放的歌曲被删除时造成的软件崩溃情况；
+2.修正低网速下启动播放的速度，提高播放稳定性；
+3.修正下载根目录问题，只需要在设置中设置一次即可；
+4.移除了一些无用的代码以及组件；
+5.添加了播放图片缓存。
+
+###2016.10.12 V1.0.0 正式版
+1.修正播放按钮背景色；
+2.调整搜索结果页面布局；
+3.添加无损下载以及文件重命名机制；
+
+###2016.10.10 V1.0.0 测试版
+1.添加虾米、百度、腾讯、天天、酷我、酷狗；
+2.优化播放部分显示；
+3.优化部分翻译；
+4.可以搜索HTTP连接；
+5.优化专辑以及音质排序
+
+###2016.10.10 V1.0.0 预览版
+1.提升软件稳定性；
+2.移除无用的界面已经组件；
+3.添加网易云搜索；
+4.添加简单程序校验；
+5.调整搜索结果展示界面
+
 ##Screenshots
 Now Playing tab, advanced view:
-![NowPlaying](http://fs2.directupload.net/images/150220/nscgvlkp.png)
+![NowPlaying](http://yyfm.oss-cn-qingdao.aliyuncs.com/anylisten/anylisten-02.jpg)
 
-Base theme = dark, color theme = lime, advanced view:
-![DarkTheme](http://fs1.directupload.net/images/150220/f4gosfmx.png)
+Dark theme
+![DarkTheme](http://yyfm.oss-cn-qingdao.aliyuncs.com/anylisten/anylisten-03.jpg)
 
-Smart view:
-
-![SmartView](http://fs2.directupload.net/images/150220/ulturivm.png)
-
-
-##Links
-[website](http://www.hurricaneproject.org/)
-<br/>[vb-paradise.de](https://www.vb-paradise.de/index.php/Thread/108601-Hurricane)
-<br/>[chip.de](http://www.chip.de/downloads/Hurricane_77588182.html)
-<br/>[computerbild.de](http://www.computerbild.de/download/Hurricane-11742809.html)
+Search Online
+![SearchOnline](http://yyfm.oss-cn-qingdao.aliyuncs.com/anylisten/anylisten-04.jpg)
 
 
 ##License
-Hurricane is licensed under the [GNU General Public License](LICENSE.txt)
+AnyListen is licensed under the [GNU General Public License](LICENSE.txt)
